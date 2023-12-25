@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 const baseURL = import.meta.env.VITE_BASE_URL;
 const userBaseURL = baseURL;
 const adminBaseURL = `${baseURL}/admin`
+const vendorBaseURL = `${baseURL}/vendor`
 
 
 const createAxiosInstance = (baseURL) => {
@@ -19,7 +20,6 @@ const createAxiosInstance = (baseURL) => {
 const attatchToken = (req, tokenName) => {
   let authToken = localStorage.getItem(tokenName);
   if (authToken) {
-    console.log(authToken, "authToken");
     req.headers.Autherization = `Bearer ${authToken}`;
   }
   return req;
@@ -40,6 +40,13 @@ adminAxioseInstance.interceptors.request.use(async(req)=>{
   return modifyReq
 })
 
+//vendor request interceptor
+export const vendorAxioseInstance = createAxiosInstance(vendorBaseURL);
+vendorAxioseInstance.interceptors.request.use(async(req) => {
+  const modifyReq = attatchToken(req, "vendorToken");  
+  return modifyReq;
+});
+
 // responce interceptor
 
 userAxiosInstance.interceptors.response.use(
@@ -50,10 +57,16 @@ userAxiosInstance.interceptors.response.use(
 adminAxioseInstance.interceptors.request.use(
   (response) => response,
   (error) => handleAxiosError(error,"admin")
+
+)
+
+vendorAxioseInstance.interceptors.request.use(
+  (response) => response,
+  (error) => handleAxiosError(error,"vendor")
 )
 
 const handleAxiosError = (error, role) => {
-  console.log(error);
+  console.log(error,'handle axiose');
   const errorMessage = error.response
     ? error.response.data.message
     : "An error occurred while request.";

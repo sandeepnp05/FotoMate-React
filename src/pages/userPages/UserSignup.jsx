@@ -47,51 +47,25 @@ const UserSignup = () => {
   return (
     <>
     <UserNavbar></UserNavbar>
+    <div
+        className='flex items-center lg:pl-12'
+        style={{
+          backgroundImage: "url('/src/assets/wedding1.jpg')",
+          backgroundSize: 'cover'
+        }}
+      >
     <div className='mt-32 p-3'>
         <div className='hero-content flex-col lg:flex-row-reverse text-black'>
           <div className='text-center lg:text-left'>
-            <h1 className='text-5xl font-bold text-indigo-900'>Welcome to FotoMate</h1>
-            <p className='py-4 text-black text-lg font-mono tracking-widest font-thin'>
-              <span className='block mb-2 font-light'>
-                <span className='text-black'>
-                  🌟 Welcome to FotoMate: the best app for booking professional
-                  photographers.
-                </span>
-              </span>
-              <br />
-              <span className='block mb-2 font-light'>
-                <span className='text-black'>
-                  📚 Create your account: in minutes and start browsing hundreds
-                  of stunning portfolios.
-                </span>
-              </span>
-              <br />
-              <span className='block mb-2 font-light'>
-                <span className='text-black'>
-                  🎁 Find your perfect match: based on your location, budget,
-                  style, and occasion.
-                </span>
-              </span>
-              <br />
-              {/* <span className='block mb-2 font-light'>
-    <span className='text-white'>💳 Book your session online: and enjoy a hassle-free payment process.</span> 
-  </span>
-  <br />
-  <span className='block mb-2 font-light'>
-    <span className='text-white'>🚀 Receive your photos:</span> in high-quality digital format within 48 hours.
-  </span> */}
-              {/* <br /> */}
-              {/* <span className='block font-light'>
-    <span className='ttext-white'>🌎 Share your memories:</span> with friends and family on social media.
-  </span> */}
-            </p>
+            
+            
           </div>
           <div
             className='card shrink-0 w-full max-w-sm shadow-2xl bg-base-100'
             style={{
-              backdropFilter: 'blur(3px)',
+              backdropFilter: 'blur(1px)',
               borderRadius: '20px',
-              background: 'rgba(255, 255, 255, 0.2)'
+              background: 'rgba(255, 255, 255, 0.3)'
             }}
           >
             <form
@@ -205,7 +179,7 @@ const UserSignup = () => {
                 <div className='mt-3 text-black justify-center'>
                   <p>
                     Already have an account?{' '}
-                    <Link to='/login' className='text-purple-600'>
+                    <Link to='/login' className='text-purple-00'>
                       Login
                     </Link>
                   </p>
@@ -214,6 +188,7 @@ const UserSignup = () => {
             </form>
           </div>
         </div>
+      </div>
       </div>
     </>
   )

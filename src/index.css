@@ -8,3 +8,18 @@
   .head_text{
     @apply text-[40px] text-black font-bold uppercase leading-[146%] 
   }
+  @keyframes fade-right {
+    0% {
+      opacity: 0;
+      transform: translateX(-50px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  .animate-fade-right {
+    animation: fade-right 1s ease-out forwards;
+  }
+  

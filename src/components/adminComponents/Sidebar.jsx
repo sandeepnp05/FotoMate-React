@@ -1,5 +1,6 @@
 import React from 'react'
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 console.log("Tailwind Elements initialized");
 
@@ -9,7 +10,7 @@ function Sidebar() {
     useEffect(() => {
         document.addEventListener('DOMContentLoaded', () => {
             const handleToggle = () => {
-                console.log('Toggle button clicked');
+               
                 const sidenav = document.getElementById('sidenav-5');
                 const isHidden = sidenav.getAttribute('data-te-sidenav-hidden') === 'true';
 
@@ -110,25 +111,27 @@ function Sidebar() {
           className="!visible relative m-0 hidden list-none p-0 data-[te-collapse-show]:block "
           data-te-sidenav-collapse-ref=""
         >
-          <li className="relative">
+          {/* <li className="relative">
             <a
               className="flex h-6 cursor-pointer items-center truncate rounded-[5px] py-4 pl-[3.4rem] pr-6 text-[0.78rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-slate-50 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none dark:text-gray-300 dark:hover:bg-white/10 dark:focus:bg-white/10 dark:active:bg-white/10"
               data-te-sidenav-link-ref=""
             >
               User list
             </a>
-          </li>
+          </li> */}
+          <Link to={'/admin/dashboard'}>
           <li className="relative">
             <a
               className="flex h-6 cursor-pointer items-center truncate rounded-[5px] py-4 pl-[3.4rem] pr-6 text-[0.78rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-slate-50 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none dark:text-gray-300 dark:hover:bg-white/10 dark:focus:bg-white/10 dark:active:bg-white/10"
               data-te-sidenav-link-ref=""
             >
-              User 
+              User List
             </a>
           </li>
+          </Link>
         </ul>
       </li>
-      <li className="relative">
+      {/* <li className="relative">
         <a
           className="flex h-12 cursor-pointer items-center truncate rounded-[5px] px-6 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-slate-50 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none dark:text-gray-300 dark:hover:bg-white/10 dark:focus:bg-white/10 dark:active:bg-white/10"
           data-te-sidenav-link-ref=""
@@ -187,7 +190,7 @@ function Sidebar() {
             </a>
           </li>
         </ul>
-      </li>
+      </li> */}
       <li className="relative">
         <a
           className="flex h-12 cursor-pointer items-center truncate rounded-[5px] px-6 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-slate-50 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none dark:text-gray-300 dark:hover:bg-white/10 dark:focus:bg-white/10 dark:active:bg-white/10"
@@ -230,22 +233,24 @@ function Sidebar() {
           className="show !visible relative m-0 hidden list-none p-0 data-[te-collapse-show]:block "
           data-te-sidenav-collapse-ref=""
         >
+          <Link to={'/admin/vendorList'}>
           <li className="relative">
             <a
               className="flex h-6 cursor-pointer items-center truncate rounded-[5px] py-4 pl-[3.4rem] pr-6 text-[0.78rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-slate-50 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none dark:text-gray-300 dark:hover:bg-white/10 dark:focus:bg-white/10 dark:active:bg-white/10"
               data-te-sidenav-link-ref=""
             >
-              Link 7
+              Vendor List
             </a>
           </li>
-          <li className="relative">
+          </Link>
+          {/* <li className="relative">
             <a
               className="flex h-6 cursor-pointer items-center truncate rounded-[5px] py-4 pl-[3.4rem] pr-6 text-[0.78rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-slate-50 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none dark:text-gray-300 dark:hover:bg-white/10 dark:focus:bg-white/10 dark:active:bg-white/10"
               data-te-sidenav-link-ref=""
             >
               Link 8
             </a>
-          </li> 
+          </li>  */}
         </ul>
       </li>
     </ul>

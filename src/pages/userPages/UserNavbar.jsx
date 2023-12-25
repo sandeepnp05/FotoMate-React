@@ -9,13 +9,14 @@ import {
 } from '@material-tailwind/react'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { useReducer } from 'react'
+import { useReducer,useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { userLogout } from '../../reduxStore/slices/userSlice'
 import { toast } from 'react-toastify'
 
 export function UserNavbar ({ UserLogin }) {
   const [openNav, setOpenNav] = React.useState(false)
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
 
   // Hooks should be used inside the functional component body
   const dispatch = useDispatch()
@@ -29,6 +30,10 @@ export function UserNavbar ({ UserLogin }) {
     toast.success('Logout successfully')
     navigate('/login')
   }
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!isDropdownOpen);
+  };
 
   React.useEffect(() => {
     window.addEventListener(
@@ -59,16 +64,8 @@ export function UserNavbar ({ UserLogin }) {
           STUDIOS
         </a>
       </Typography>
-      <Typography
-        as='li'
-        variant='small'
-        color='blue-gray'
-        className='p-1 font-normal'
-      >
-        <a href='#' className='flex items-center'>
-          PROFILE
-        </a>
-      </Typography>
+     
+
       <Typography
         as='li'
         variant='small'
@@ -91,6 +88,48 @@ export function UserNavbar ({ UserLogin }) {
           </a>
         </Typography>
       </Link>
+
+
+      {user && 
+      <div className='flex items-center'>
+      <div className='relative'>
+        <div
+          className='avatar cursor-pointer'
+          onClick={toggleDropdown}
+        >
+          <div className='w-6 mx-1 rounded-full ring ring-primary ring-offset-base-30 ring-offset-1'>
+            <img src='https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg' alt='avatar' />
+          </div>
+        </div>
+
+        {isDropdownOpen && (
+          
+    <div className='dropdown-top absolute left-0 bg-white p-2 rounded-md shadow-lg w-22'>
+    <ul className='space-y-1'>
+      <li className='px-2 py-1 hover:bg-gray-100'>
+        <Link to={'/profile'}>
+        <a href='#' className='text-gray-900 text-sm font-medium block'>
+          Profile
+        </a>
+        </Link>
+      </li>
+      <li className='px-2 py-1 hover:bg-gray-100' onClick={() => handleLogout()}>
+        <a href='#' className='text-gray-900 text-sm font-medium block'>
+          Logout
+        </a>
+      </li>
+    </ul>
+  </div>
+  
+   
+   
+    
+    
+        )}
+      </div>
+    </div>
+    }
+      
     </ul>
   )
 
@@ -99,6 +138,7 @@ export function UserNavbar ({ UserLogin }) {
       <div className='-m-6 max-h-[768px] w-[calc(100%+48px)] overflow-scroll'>
         <Navbar className='fixed top-0 z-10 w-full h-max max-w-full rounded-none px-4 py-2 lg:px-8 lg:py-4'>
           <div className=' flex items-center justify-between text-blue-gray-900'>
+            <Link to={'/'}>
             <Typography
               as='a'
               href='#'
@@ -106,8 +146,10 @@ export function UserNavbar ({ UserLogin }) {
             >
               FotoMate
             </Typography>
+            </Link>
             <div className='flex items-center gap-4'>
               <div className='mr-4 hidden  lg:block'>{navList}</div>
+              {!user &&
               <Link to='/login'>
                 <div className='flex items-center gap-x-1'>
                   <Button
@@ -119,6 +161,7 @@ export function UserNavbar ({ UserLogin }) {
                   </Button>
                 </div>
               </Link>
+              }
               <IconButton
                 variant='text'
                 className='ml-auto h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden'

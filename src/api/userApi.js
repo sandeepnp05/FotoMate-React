@@ -8,6 +8,7 @@ export const userSignup = async (signupData)=>{
 
 export const otpVerification = async (otp,otpId,userId)=>{
     const data = await userAxiosInstance.post('/otp',{otp,userId})
+
     return data
 }
 
@@ -21,3 +22,17 @@ export const loginVerification = async (loginData)=>{
     return data
 
 }
+
+
+export const forgotPassword = async (userEmail)=>{
+    const data = await userAxiosInstance.post('/forgotPassword',userEmail)
+    return data;
+}
+
+
+export const resetPassword = async(id,email,password) => {
+    const data = await userAxiosInstance.put(`/resetPassword/${id}/${email}`,{password})
+    return data
+  }
+
+

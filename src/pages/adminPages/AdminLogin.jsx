@@ -26,7 +26,7 @@
             })
             );
             toast.success(res?.data?.message);
-            navigate("/admin/dashbord");
+            navigate("/admin/dashboard");
         }
         } catch (error) {
         toast.error(error?.response?.data?.message);

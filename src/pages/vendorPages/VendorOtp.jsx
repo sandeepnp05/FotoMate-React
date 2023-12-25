@@ -3,13 +3,13 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik'
 import { otpSchema } from '../../validations/user/otpValidation'
 import { useEffect, useState, useRef } from 'react'
-import { otpVerification } from '../../api/userApi'
+import { vendorOtpVerifiaction } from '../../api/vendorApi'
 import { toast } from 'react-toastify'
 
-function Otp () {
+function VendorOtp () {
   const location = useLocation()
   const navigate = useNavigate()
-  const { userEmail, userId, otpId } = location.state
+  const { vendorEmail, vendorId} = location.state
   const [countDown, setCountDown] = useState(60)
   const [showResendButton, setShowResendButton] = useState(false)
 
@@ -30,30 +30,42 @@ function Otp () {
 
   const onSubmit = async () => {
     try {
-      const combinedOtp = Object.values(values).join('')
-      const res = await otpVerification(combinedOtp, otpId, userId)
+      const combinedOtp = Object.values(values).join('');
+      console.log('working1')
+      const res = await vendorOtpVerifiaction(combinedOtp, vendorId);
+      console.log('working2')
+  
       if (res?.data?.status) {
-        toast.success(res?.data?.message)
-        navigate('/login', { state: 'Email verified' })
+        toast.success(res?.data?.message);
+        navigate('/vendor/login', { state: 'Email verified' });
       }
     } catch (error) {
-      toast.error(error.response.data.message)
-    }
-  }
-  const resendOtp = async () => {
-    try {
-      const res = await clientResendOtp(userEmail)
-      if (res.status == 200) {
-        console.log(res.data.message, 'from client resend')
-        toast.success(res.data.message)
-        setCountDown(60)
-        setShowResendButton(false)
+        console.log(error);
+        console.log(error.message);
+  
+      // Check if error.response exists before accessing its properties
+      if (error.response) {
+        toast.error(error.response?.data?.message || 'An error occurred.');
+      } else {
+        toast.error('An error occurred.');
       }
-    } catch (error) {
-      console.log(error.message)
-      toast.error(error.response.data.message)
     }
-  }
+  };
+  
+//   const resendOtp = async () => {
+//     try {
+//       const res = await clientResendOtp(userEmail)
+//       if (res.status == 200) {
+//         console.log(res.data.message, 'from client resend')
+//         toast.success(res.data.message)
+//         setCountDown(60)
+//         setShowResendButton(false)
+//       }
+//     } catch (error) {
+//       console.log(error.message)
+//       toast.error(error.response.data.message)
+//     }
+//   }
 
   const { values, touched, errors, handleChange, handleSubmit } = useFormik({
     initialValues: {
@@ -134,7 +146,7 @@ function Otp () {
                   <span className='text-sm text-white'>
                     Enter the OTP sent to
                   </span>
-                  <span className='font-bold text-white'>{userEmail}</span>
+                  <span className='font-bold text-white'>{vendorEmail}</span>
                 </div>
                 <form onSubmit={handleSubmit}>
                   <div
@@ -218,7 +230,7 @@ function Otp () {
                     </button>
                   </div>
 
-                  <div className='flex flex-row items-center justify-center text-center text-sm font-medium space-x-1 text-white py-3'>
+                  {/* <div className='flex flex-row items-center justify-center text-center text-sm font-medium space-x-1 text-white py-3'>
                     {countDown > 0 ? (
                       <p>Resend otp in {countDown} seconds</p>
                     ) : (
@@ -231,7 +243,7 @@ function Otp () {
                         </p>
                       )
                     )}
-                  </div>
+                  </div> */}
                 </form>
               </div>
             </div>
@@ -242,4 +254,4 @@ function Otp () {
   )
 }
 
-export default Otp
+export default VendorOtp

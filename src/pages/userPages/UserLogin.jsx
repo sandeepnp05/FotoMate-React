@@ -48,30 +48,30 @@ async function onSubmit  (){
     <>
     <UserNavbar></UserNavbar>
     <div
-        className='mt-12 hero min-h-screen bg-cover bg-center '
-        // style={{
-        //   backgroundImage: 'url("/src/assets/camera1.jpg")'
-        // }}
-        >
-        <div className='hero-content flex-col lg:flex-row-reverse'>
+        className='flex items-center lg:pl-12 h-screen'
+        style={{
+          backgroundImage: "url('/src/assets/wedding1.jpg')",
+          backgroundSize: 'cover'
+        }}
+      >
+    <div className='mt-32 p-3'>
+        <div className='hero-content flex-col lg:flex-row-reverse text-black'>
           <div className='text-center lg:text-left'>
-            <h1 className='text-5xl font-bold text-indigo-900 '>Login now!</h1>
-            <p className='text-black'>
-            Please enter your username and password to access your account. 
-            </p>
+            
+            
           </div>
           <div
             className='card shrink-0 w-full max-w-sm shadow-2xl bg-base-100'
             style={{
               backdropFilter: 'blur(1px)',
               borderRadius: '20px',
-              background: 'rgba(255, 255, 255, 0.1)'
+              background: 'rgba(255, 255, 255, 0.3)'
             }}
           >
             <form onSubmit={handleSubmit} className='card-body'>
               <div className='form-control'>
                 <label className='label'>
-                  <span className='label-text text-black'>Email</span>
+                  <span className='label-text text-gray-800'>Email</span>
                 </label>
                 <input
                   type='email'
@@ -116,16 +116,17 @@ async function onSubmit  (){
                 <button className='btn btn-primary bg-indigo-900 hover:bg-indigo-800'>Login</button>
               </div>
             </form>
-            <div className='inline-flex items-center justify-center'>
-              <p className='text-black text-sm mb-5'>
+            <div className='flex flex-col items-center justify-center space-y-2'>
+  <p className='text-black text-sm'>
+    Not a member yet? 
+    <Link to='/signup' className='text-indigo-900 ml-1'>Join us now.</Link>
+  </p>
+  <Link to='/vendor/signup' className='text-indigo-900 pb-4'>Sign in as a vendor.</Link>
+</div>
 
-                Not a member yet? 
-              
-              <Link to='/signup' className='text-indigo-900'>Join us now.</Link>
-              </p>
-            </div>
           </div>
         </div>
+      </div>
       </div>
      
     </>
