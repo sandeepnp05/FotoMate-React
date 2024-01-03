@@ -31,6 +31,24 @@ export const vendorLoginVerify = async (loginData) => {
     }
   };
 
+  export const addStudio = async (formData, vendorId) => {
+    try {
+      const data = await vendorAxioseInstance.post('/addStudio', {...formData}, vendorId);
+      return data;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+export const showVendorStudio = async (vendorId) => {
+  try {
+    const data = await vendorAxioseInstance.get(`/studio/${vendorId}`);
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 
 
 

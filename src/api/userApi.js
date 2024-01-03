@@ -35,4 +35,21 @@ export const resetPassword = async(id,email,password) => {
     return data
   }
 
+  export const googleAuth = async (authResult) => {
+    try {
+      const { uid, displayName, email, photoURL } = authResult.user;
+      const data = await userAxiosInstance.post('/google', {
+        uid,
+        displayName,
+        email,
+        photoURL,
+      });
+      return data;
+    } catch (error) {
+      console.error("Error during Google authentication:", error);
+      throw error;
+    }
+  };
+
+
 

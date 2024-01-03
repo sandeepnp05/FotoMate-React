@@ -6,12 +6,15 @@ import {  vendorList,blockVendor } from '../../api/adminApi.js'
 import { Button } from '@material-tailwind/react'
 import { toast } from 'react-toastify'
 import Pagination from '../../components/common/Pagination.jsx'
+import Sidebar from '../../components/adminComponents/Sidebar'
 function VendorList() {
     const [vendors, setVendors] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
     const navigate = useNavigate()
     const dataPerPage = 5
-  
+
+    
+
     useEffect(() => {
       vendorList()
         .then(res => {
@@ -63,7 +66,7 @@ function VendorList() {
     const numbers = [...Array(totalPages + 1).keys()].slice(1)
   return (
     <>
-      <VendorNavbar/>
+      <Sidebar/>
       <div className={`mx-4 overflow-x-auto `}>
         {' '}
         {/* Adjusted margin from ml-12 to ml-16 */}
@@ -74,7 +77,10 @@ function VendorList() {
                 Vendor Id
               </th>
               <th scope='col' className='px-6 py-3 text-left'>
-                Name
+               Vendor Name
+              </th>
+              <th scope='col' className='px-6 py-3 text-left'>
+               studio
               </th>
               <th scope='col' className='px-6 py-3 text-left'>
                 Mobile
@@ -97,6 +103,7 @@ function VendorList() {
                   {vendor?._id}
                 </td>
                 <td className='px-6 py-4 text-left'>{vendor.name}</td>
+                <td className='px-6 py-4 text-left'>{vendor.studioInfo.studioName}</td>
                 <td className='px-6 py-4 text-left'>{vendor.mobile}</td>
                 <td className='px-6 py-4 text-left'>{vendor.email}</td>
 

@@ -7,18 +7,19 @@ import Contact from '../pages/userPages/Contact'
 import UserProfile from '../pages/userPages/userProfile'
 import ForgetPassword from '../pages/userPages/ForgotPassword'
 import ResetPassword from '../pages/userPages/ResetPassword'
+import UserPublic from './userPrivate/UserPublic'
 
 function UserRoute() {
   return (
     <Routes>
-        <Route path='/signup' element={<UserSignup/>}/>
-        <Route path='/otp' element={<Otp/>}/>
-        <Route path='/login' element={<UserLogin/>}/>
+        <Route path='/signup' element={<UserPublic><UserSignup/></UserPublic>}/>
+        <Route path='/otp' element={<UserPublic><Otp/></UserPublic>}/>
+        <Route path='/login' element={<UserPublic><UserLogin/></UserPublic>}/>
         <Route path='/' element={<UserHome/>}/>
         <Route path='/contact' element={<Contact/>}/>
         <Route path='/profile' element={<UserProfile/>}/>
-        <Route path='/forgotPassword' element={<ForgetPassword/>}/>
-        <Route path='/resetPassword/:id/:token' element={<ResetPassword/>}/>
+        <Route path='/forgotPassword' element={<UserPublic><ForgetPassword/></UserPublic>}/>
+        <Route path='/resetPassword/:id/:token' element={<UserPublic><ResetPassword/></UserPublic>}/>
     </Routes>
   )
 }

@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import { Link, useNavigate } from 'react-router-dom' 
+import { Link, useNavigate} from 'react-router-dom' 
 import { loginSchema } from "../../validations/user/loginValidation";
 import { toast } from 'react-toastify'
 import { vendorLoginVerify } from '../../api/vendorApi'
@@ -13,6 +13,7 @@ function VendorLogin () {
     const onSubmit = async () =>{
         try {
             const res = await vendorLoginVerify(values);
+            const studio = res?.data?.studio
             if(res?.status === 200){
                 const {token,vendor} = res.data;
                 localStorage.setItem("vendorToken", token)
@@ -23,7 +24,7 @@ function VendorLogin () {
                     })
                 )
                 toast.success(res?.data?.message)
-                navigate("/vendor")
+                navigate("/vendor",{state:{studio}})
             }
         } catch (error) {
             console.log(error.message)
@@ -40,7 +41,7 @@ function VendorLogin () {
       onSubmit,
     })
   return (
-    <div className='flex items-center justify-center min-h-screen' style={{ background: 'linear-gradient(to right,  #00bcd4, #2196f3)' }}>
+    <div className='flex items-center justify-center min-h-screen bg-gray-400'>
   <div className='flex items-center justify-center min-h-screen bg-gradient-to-r from-navy to-blue-400'>
     <div className='flex w-full max-w-xl bg-white rounded-lg shadow-lg overflow-hidden'>
       
@@ -104,12 +105,12 @@ function VendorLogin () {
             <p className='mt-6 text-center text-sm text-gray-600'>
               Not have an account ?
               <Link to='/vendor/signup'>
-                <a
-                  href='#'
+                <span
+                
                   className='text-blue-500 hover:text-blue-700 no-underline'
                 >
                  {'  '} Register
-                </a>
+                </span>
               </Link>
             </p>
           </div>

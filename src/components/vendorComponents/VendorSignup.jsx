@@ -40,7 +40,7 @@ function VendorSignup () {
         onSubmit,
   })
   return (
-    <div className='flex items-center justify-center min-h-screen' style={{ background: 'linear-gradient(to right,  #00bcd4, #2196f3)' }}>
+    <div className='flex items-center justify-center min-h-screen bg-gray-400'>
     <div className='flex items-center justify-center min-h-screen bg-gradient-to-r from-navy to-blue-400'>
       <div className='flex w-full max-w-xl bg-white rounded-lg shadow-lg overflow-hidden'>
         

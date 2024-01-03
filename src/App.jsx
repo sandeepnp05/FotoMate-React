@@ -16,7 +16,6 @@ function App () {
             <Route path='/vendor/*' element={<VendorRoute/>} />
             <Route path='/*' element={<UserRoute />} />
           </Routes>
-        
       </Router>
     </>
   )
