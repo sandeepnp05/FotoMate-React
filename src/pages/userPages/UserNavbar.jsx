@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   Navbar,
   Collapse,
@@ -13,16 +13,17 @@ import {useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { userLogout } from '../../reduxStore/slices/userSlice'
 import { toast } from 'react-toastify'
+import { getUserDetails } from '../../api/userApi'
 
-export function UserNavbar () {
+export function UserNavbar ({userImage}) {
   const [openNav, setOpenNav] = useState(false)
   const [isDropdownOpen, setDropdownOpen] = useState(false)
-
-  // Hooks should be used inside the functional component body
+  const [img,setImage] = useState('')
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const location = useLocation()
   const { user } = useSelector(state => state.userReducer)
+ 
 
   const handleLogout = () => {
     localStorage.removeItem('userToken')
@@ -30,6 +31,10 @@ export function UserNavbar () {
     toast.success('Logout successfully')
     navigate('/login')
   }
+  useEffect(()=>{
+    setImage(userImage)
+  },[userImage])
+
 
   const toggleDropdown = () => {
     setDropdownOpen(!isDropdownOpen)
@@ -54,15 +59,16 @@ export function UserNavbar () {
           HOME
         </Typography>
       </Link>
+      <Link to={'/studios'}>
       <Typography
         as='li'
         variant='small'
         color='blue-gray'
         className='p-1 font-normal'
       >
-          STUDIOS
+       STUDIOS
       </Typography>
-
+      </Link>
       <Typography
         as='li'
         variant='small'
@@ -86,9 +92,9 @@ export function UserNavbar () {
         <div className='flex items-center'>
           <div className='relative'>
             <div className='avatar cursor-pointer' onClick={toggleDropdown}>
-              <div className='w-6 mx-1 rounded-full ring ring-primary ring-offset-base-2 ring-offset-1'>
+              <div className='w-6 mx-2 rounded-full ring ring-danger ring-offset-base-1 ring-offset-1'>
                 <img
-                  src={user.profileImage}
+                  src={img?img:user.profileImage}
                   alt='https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg'
                 />
               </div>

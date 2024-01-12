@@ -54,13 +54,13 @@ userAxiosInstance.interceptors.response.use(
   (error) => handleAxiosError(error, "user")
 );
 
-adminAxioseInstance.interceptors.request.use(
+adminAxioseInstance.interceptors.response.use(
   (response) => response,
   (error) => handleAxiosError(error,"admin")
 
 )
 
-vendorAxioseInstance.interceptors.request.use(
+vendorAxioseInstance.interceptors.response.use(
   (response) => response,
   (error) => handleAxiosError(error,"vendor")
 )

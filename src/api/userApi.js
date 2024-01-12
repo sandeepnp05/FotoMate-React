@@ -50,6 +50,39 @@ export const resetPassword = async(id,email,password) => {
       throw error;
     }
   };
+  export const vendorList = async()=>{
+    try {
+      const data = await userAxiosInstance.get('vendorList')
+      return data;
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+  export const singleStudioDetails = async(vendorId)=>{
+    try {
+      const data = await userAxiosInstance.get(`/singleStudio/${vendorId}`);
+      return data;
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+  export const updateProfileImage = async (values) => {
+    try {
+      console.log(values)
+      const data = await userAxiosInstance.patch('/updateProfile',values)
+      return data;
+    } catch (error) {
+      // console.error('Error updating profile image:', error);
+      throw error;
+    }
+  };
 
+  export const getUserDetails = async (_id) => {
+    console.log('wroking api')
+    const data = await userAxiosInstance.get(`/userDetails/${_id}`)
+    console.log(data,'dataaaaaaaa ')
+    return data
+  }
+ 
 
 

@@ -3,7 +3,9 @@ import storage from 'redux-persist/lib/storage';
 import userReducer from './slices/userSlice'
 import adminReducer from './slices/adminSlice'
 import vendorReducer from './slices/vendorSlice'
+
 import { persistReducer, persistStore,FLUSH,
+
   REHYDRATE,
   PAUSE,
   PERSIST,

@@ -8,6 +8,9 @@ import UserProfile from '../pages/userPages/userProfile'
 import ForgetPassword from '../pages/userPages/ForgotPassword'
 import ResetPassword from '../pages/userPages/ResetPassword'
 import UserPublic from './userPrivate/UserPublic'
+import SingleStudio from '../pages/userPages/SingleStudio'
+import Studios from '../pages/userPages/Studios'
+import ViewUserProfile from '../pages/userPages/viewUserProfile'
 
 function UserRoute() {
   return (
@@ -18,8 +21,11 @@ function UserRoute() {
         <Route path='/' element={<UserHome/>}/>
         <Route path='/contact' element={<Contact/>}/>
         <Route path='/profile' element={<UserProfile/>}/>
+        <Route path='/viewProfile' element={<ViewUserProfile/>}/>
         <Route path='/forgotPassword' element={<UserPublic><ForgetPassword/></UserPublic>}/>
         <Route path='/resetPassword/:id/:token' element={<UserPublic><ResetPassword/></UserPublic>}/>
+        <Route path='/studio/:id'element={<SingleStudio/>}/>
+        <Route path='/studios'element={<Studios/>}/>
     </Routes>
   )
 }

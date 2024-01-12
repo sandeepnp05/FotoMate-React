@@ -1,9 +1,24 @@
-import React from 'react'
+import React, { useState,useEffect } from 'react'
+import Loading from '../common/Loading'
+
 
 function InfiniteScroll() {
+  const [loading,setLoading] = useState(true)
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000); 
+  }, []);
+  if (loading) {
+    return(
+      <div className="flex items-center justify-center h-screen">
+          <Loading/>
+        </div>
+    )
+   }  
   return (
     <>
-      <div className="relative flex min-h-screen flex-col justify-center overflow-hidden bg-gray-50 py-6 sm:py-12">
+      <div className="relative flex py-20 flex-col justify-center overflow-hidden bg-gray-50">
   <img
     src="/img/beams.jpg"
     alt=""
@@ -70,7 +85,7 @@ function InfiniteScroll() {
       />
     </div>
   </div>
-  <div className="pointer-events-none relative mt-10 flex gap-10 overflow-hidden">
+  <div className="pointer-events-none relative mt-5 flex gap-10 overflow-hidden">
     <div className="animate-marquee flex min-w-full shrink-0 items-center justify-around gap-10 [animation-direction:reverse]">
       <img
         className="aspect-square max-w-[clamp(10rem,28vmin,20rem)] rounded-md object-cover shadow-md"
@@ -129,9 +144,8 @@ function InfiniteScroll() {
       />
     </div>
   </div>
-</div>
-
-    </>
+   </div>
+  </>
   )
 }
 

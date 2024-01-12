@@ -1,58 +1,88 @@
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate, Link } from 'react-router-dom'
-import { vendorLogout } from '../../../reduxStore/slices/vendorSlice'
-import { toast } from 'react-toastify'
-function VendorNavbar () {
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-  const { _id } = useSelector(state => state.vendorReducer.vendor)
-  const vendorId = _id
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, Link } from 'react-router-dom';
+import { vendorLogout } from '../../../reduxStore/slices/vendorSlice';
+import { toast } from 'react-toastify';
+
+function VendorNavbar() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { _id } = useSelector((state) => state.vendorReducer.vendor);
+  const vendorId = _id;
+
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   const handleLogout = () => {
-    localStorage.removeItem('vendorToken')
+    localStorage.removeItem('vendorToken');
     localStorage.removeItem('studio');
-    dispatch(vendorLogout())
-    toast.success('Vendor logout successfully')
-    navigate('/vendor/login')
-  }
+    dispatch(vendorLogout());
+    toast.success('Vendor logout successfully');
+    navigate('/vendor/login');
+  };
+
   return (
-    <div className='navbar bg-base-100'>
-      <div className='navbar-start'>
-        <div className='dropdown'>
-          <div tabIndex={0} role='button' className='btn btn-ghost btn-circle'>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              className='h-5 w-5'
-              fill='none'
-              viewBox='0 0 24 24'
-              stroke='currentColor'
+    <div className={`navbar bg-base-100 ${isMobile ? 'mobile-view' : ''}`}>
+      <div className='navbar-start justify-between'>
+        {isMobile ? (
+          <div className='dropdown'>
+            <div tabIndex={0} role='button' className='btn btn-ghost btn-circle'>
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                className='h-5 w-5'
+                fill='none'
+                viewBox='0 0 24 24'
+                stroke='currentColor'
+              >
+                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M4 6h16M4 12h16M4 18h7' />
+              </svg>
+            </div>
+            <ul
+              tabIndex={0}
+              className='menu menu-sm  dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52'
             >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                strokeWidth='2'
-                d='M4 6h16M4 12h16M4 18h7'
-              />
-            </svg>
+              <li>
+                <Link to={'/vendor'}>Homepage</Link>
+              </li>
+              <li>
+                <Link to={`/vendor/studio/${vendorId}`}>Studio</Link>
+              </li>
+              {/* <li style={{ cursor:'pointer' }}>
+                <Link to={'/about'}> About</Link>
+              </li>
+              <li  onClick={() => handleLogout()}>
+               <Link>Logout </Link>
+              </li> */}
+            </ul>
           </div>
-          <ul
-            tabIndex={0}
-            className='menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52'
-          >
-            <li>
-              <Link to={'/vendor'}>Homepage</Link>
-            </li>
-            <li>
+        ) : (
+          <div className='flex items-center justify-end'>
+            <div className='navbar-item p-3'>
+              <Link to={'/vendor'}>Home</Link>
+            </div>
+            <div className='navbar-item p-3'>
               <Link to={`/vendor/studio/${vendorId}`}>Studio</Link>
-            </li>
-            <li>
-              <a>About</a>
-            </li>
-            <li onClick={() => handleLogout()}>
-              <a>Logout</a>
-            </li>
-          </ul>
-        </div>
+            </div>
+            <div className='navbar-item p-3'>
+              <Link >About</Link>
+            </div>
+            
+            <div className='navbar-item p-3' onClick={() => handleLogout()}>
+              <Link >Logout</Link>
+              </div>
+          </div>
+        )}
       </div>
       <div className='navbar-center'>
         <a className='btn btn-ghost text-xl'>FotoMate</a>
@@ -66,12 +96,7 @@ function VendorNavbar () {
             viewBox='0 0 24 24'
             stroke='currentColor'
           >
-            <path
-              strokeLinecap='round'
-              strokeLinejoin='round'
-              strokeWidth='2'
-              d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'
-            />
+            <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z' />
           </svg>
         </button>
         <button className='btn btn-ghost btn-circle'>
@@ -95,7 +120,7 @@ function VendorNavbar () {
         </button>
       </div>
     </div>
-  )
+  );
 }
 
-export default VendorNavbar
+export default VendorNavbar;

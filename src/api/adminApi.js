@@ -35,3 +35,62 @@ export const blockVendor = async(vendorId,status)=>{
     
    }
 }
+export const blockStudio = async ( studioId, status ) => {
+    console.log('working api');
+    try {
+      const data = await adminAxioseInstance.patch('/studioBlock', { studioId, status });
+      console.log(data, 'data api');
+      return data;
+    } catch (error) {
+      console.error('Axios Error:', error);
+      throw error;
+    }
+  };
+
+  export const addCategory = async (categoryData)=>{
+    try {
+        const data = await adminAxioseInstance.post('/addCategory',categoryData)
+        console.log(categoryData,'api data')
+        
+        return data;
+    } catch (error) {
+        console.log(error)
+    }
+  }
+  
+  export const adminCategoryList = async ()=>{
+    try {
+        const data = await adminAxioseInstance.get('/categoryList')
+        
+        return data;
+    } catch (error) {
+        console.log(error)
+    }
+  }
+  export const singleCategory = async (cat_id)=>{
+    try {
+        console.log(cat_id,'apiiiiiiiiiii')
+        const data = await adminAxioseInstance.get(`/singleCategory/${cat_id}`)
+        return data;
+    } catch (error) {
+        console.log(error)
+    }
+  } 
+  
+  export const add_subcategory = async(cat_id,values,baseImage)=>{
+    try {
+        const data = await adminAxioseInstance.post(`/addSubCategory`,{cat_id,values,baseImage})
+        return data;
+    } catch (error) {
+        console.log(error.message)
+    }
+  }
+  export const subcategories = async(cat_id)=>{
+    try {
+        const data = await adminAxioseInstance.get(`/subcategory/${cat_id}`)
+        console.log(data,'data')
+        return data;
+    } catch (error) {
+        console.log(error.message)
+    }
+  }

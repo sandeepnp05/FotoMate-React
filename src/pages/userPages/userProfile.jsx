@@ -1,20 +1,58 @@
-import React, { useRef, useState ,useEffect} from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { UserNavbar } from './UserNavbar'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button } from '@material-tailwind/react'
-import EditIcon from '@mui/icons-material/Edit'
+import EditIcon from '@mui/icons-material/Edit' // Import EditIcon from @mui/icons-material
 import { Link, useNavigate } from 'react-router-dom'
+import { getUserDetails, updateProfileImage } from '../../api/userApi.js'
+import { userLogout, updateUserImage } from '../../reduxStore/slices/userSlice'
+import { toast } from 'react-toastify'
+import { initFlowbite } from 'flowbite'
+initFlowbite()
 
-function userProfile () {
-  const [file, setFile] = useState('')
-  const [profileImage, setProfileImage] = useState('');
+function UserProfile () {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const fileRef = useRef(null)
   const { user } = useSelector(state => state.userReducer)
+  const { _id } = user
+  const [img, setImg] = useState('')
+  const [render, setRender] = useState(false)
+  const [userImage, setUserImage] = useState(null)
+
+  const handlePhotoChange = e => {
+    const selectedPhoto = e.target.files[0]
+    setPhotoToBase(selectedPhoto)
+  }
+
+  const setPhotoToBase = file => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onloadend = () => {
+      setImg(reader.result)
+    }
+  }
+
+  const handleImageUpdate = async () => {
+    try {
+      if (img) {
+        const res = await updateProfileImage({ _id, img })
+        const user = res.data
+        console.log(res.data)
+        setRender(true)
+      }
+    } catch (error) {
+      console.error('Error editing photo:', error)
+    }
+  }
+  handleImageUpdate()
+
   useEffect(() => {
-    setProfileImage(user.profileImage);
-  }, [user.profileImage]);
+    getUserDetails(_id).then(response => {
+      console.log(response, 'reds')
+      setUserImage(response?.data?.userData?.profileImage)
+      dispatch(updateUserImage(response?.data?.userData?.profileImage))
+    })
+  }, [img, render, dispatch])
 
   const handleLogout = () => {
     localStorage.removeItem('userToken')
@@ -23,43 +61,49 @@ function userProfile () {
     navigate('/login')
   }
 
-  const handleImageError = () => {
-    setProfileImage('path/to/https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg'); // Provide a fallback image
-  };
-
   return (
     <>
-      <UserNavbar></UserNavbar>
-      <div className='p-3 max-w-lg max-auto mt-24'>
+      <UserNavbar userImage={userImage} />
+      <div className='p-3 max-w-lg max-auto mt-24 w-ful'>
         <form className='flex flex-col gap-4'>
           <div className='relative self-center mt-2'>
-            {' '}
-            {/* Add relative position here */}
-            <img
-              onClick={() => fileRef.current.click()}
-              src={user.profileImage}
-              alt='Profile'
-              className='rounded-full h-24 w-24 object-cover cursor-pointer'
-              onError={handleImageError}
-            />
-            <div className='absolute bottom-1 right-7 cursor-pointer'>
-              <EditIcon fontSize='small' style={{ color: 'white' }} />
-            </div>
+            <>
+              <div className='h-24 w-24 bg-blue-500 rounded-full overflow-hidden border mb-4 md:mb-0 md:mr-4'>
+                <label htmlFor='fileInput'>
+                  <input
+                    type='file'
+                    id='fileInput'
+                    accept='image/*'
+                    style={{ display: 'none' }}
+                    onChange={handlePhotoChange}
+                  />
+                  <img
+                    className='h-full w-full object-cover'
+                    src={
+                      userImage ||
+                      'https://th.bing.com/th/id/OIP.puMo9ITfruXP8iQx9cYcqwHaGJ?pid=ImgDet&rs=1'
+                    }
+                    alt='Profile'
+                  />
+                </label>
+              </div>
+              <div className='absolute bottom-1 right-7 cursor-pointer'>
+                <EditIcon fontSize='small' style={{ color: 'white' }} />
+              </div>
+            </>
           </div>
-
-          <input type='file' ref={fileRef} hidden accept='image/*' />
           <input
             type='text'
             placeholder='username'
+            value={user.name}
             id='username'
-            defaultValue={user.name}
             className='border p-3 rounded-lg'
           />
           <input
             type='text'
             placeholder='email'
+            value={user.email}
             id='email'
-            defaultValue={user.email}
             className='border p-3 rounded-lg'
           />
           <input
@@ -71,9 +115,13 @@ function userProfile () {
           <Button type='button'>Update</Button>
         </form>
         <div className='flex justify-between mt-5'>
-          <span className='text-red-700'>Delete Account</span>
-          <Link to={handleLogout}>
-            <span className='text-red-700'>Sign out</span>
+          <Link to={'/viewProfile'}>
+            <span className='text-red-700'>View Profile</span>
+          </Link>
+          <Link to='/login'>
+            <span className='text-red-700' onClick={handleLogout}>
+              Sign out
+            </span>
           </Link>
         </div>
       </div>
@@ -81,4 +129,4 @@ function userProfile () {
   )
 }
 
-export default userProfile
+export default UserProfile

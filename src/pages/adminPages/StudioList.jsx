@@ -1,72 +1,69 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { vendorList, blockVendor } from '../../api/adminApi.js'
+import { vendorList as studioList, blockVendor,blockStudio } from '../../api/adminApi.js'
 import { Button } from '@material-tailwind/react'
 import { toast } from 'react-toastify'
 import Pagination from '../../components/common/Pagination.jsx'
 import Sidebar from '../../components/adminComponents/Sidebar'
-function VendorList () {
-  const [vendors, setVendors] = useState([])
+function StudioList () {
+  const [studio, setStudio] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
+  const [studioData, setStudioData] = useState([]);
   const navigate = useNavigate()
   const dataPerPage = 5
 
   useEffect(() => {
-    vendorList()
+    studioList()
       .then(res => {
-        setVendors(res.data || [])
+        setStudio(res.data || [])
       })
       .catch(error => {
         toast.error(
-          error.response?.data?.message || 'Failed to fetch vendor data'
+          error.response?.data?.message || 'Failed to fetch studio data'
         )
         console.log(error.message)
       })
-  }, [])
+  }, [studioData])
 
-  const handleBlockVendor = async (vendorId, status) => {
+  const handleBlockStudio = async (studioId, status) => {
     try {
-      console.log('working')
-      const res = await blockVendor(vendorId, status)
-      console.log(vendorId, status, 'vs')
-
-      if (res.data && res.data.message === 'updated') {
-        // If the response has data and the message is 'updated'
-        const updatedData = vendors.map(vendor => {
-          if (vendor._id === vendorId) {
-            // Update only the targeted vendor's isBlocked status
+      const res = await blockStudio(studioId, status);
+  
+      if (res.status === 201 && res.data.message === 'updated') {
+        // Assuming studioData is the state holding studio information
+        const updatedData = studioData.map((studio) => {
+          if (studio.studioInfo._id === studioId) {
             return {
-              ...vendor,
-              isBlocked: !status
-            }
+              ...studio,
+              isBlocked: !status,
+            };
           }
-          return vendor
-        })
-        setVendors(updatedData)
-        toast.success(`Vendor ${status ? 'unblocked' : 'blocked'} successfully`)
+          return studio;
+        });
+  
+        // Assuming setStudioData is a function to update the studio information in the state
+        setStudioData(updatedData);
+        toast.success(`Studio ${status ? 'unblocked' : 'blocked'} successfully`);
       } else {
-        toast.error('Failed to update vendor status')
+        toast.error('Failed to update studio status');
       }
     } catch (error) {
       toast.error(
-        error.response?.data?.message || 'Error updating vendor status'
-      )
-      console.log(error.response)
+        error.response?.data?.message || 'Error updating studio status'
+      );
+      console.log(error.message);
     }
-  }
-
-  const filteredData = vendors
+  };
+  
+  console.log(studio, 'studio')
+  const filteredData = studio
 
   const lastIndex = currentPage * dataPerPage
   const firstIndex = lastIndex - dataPerPage
-  const vendorInSinglePage = filteredData.slice(firstIndex, lastIndex)
+  const studioInSinglePage = filteredData.slice(firstIndex, lastIndex)
   const totalPages = Math.ceil(filteredData.length / dataPerPage)
   const numbers = [...Array(totalPages + 1).keys()].slice(1)
-  console.log(vendors, 'vendors')
-  console.log(numbers, 'numbers')
-  console.log(totalPages, 'totalPages')
-  console.log(vendorInSinglePage, 'vendorInSinglePage')
   return (
     <>
       <Sidebar />
@@ -77,46 +74,50 @@ function VendorList () {
           <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
             <tr>
               <th scope='col' className='px-6 py-3 text-left'>
-                Vendor Id
+                Studio Id
               </th>
               <th scope='col' className='px-6 py-3 text-left'>
-                Vendor Name
+                Studio Name
               </th>
               <th scope='col' className='px-6 py-3 text-left'>
-                studio
+                City
               </th>
               <th scope='col' className='px-6 py-3 text-left'>
-                Mobile
+                Rating
               </th>
               <th scope='col' className='px-6 py-3 text-left'>
-                Email
-              </th>
-              <th scope='col' className='px-6 py-3 text-left'>
-                Email Verified
+                About
               </th>
               <th scope='col' className='px-6 py-3 text-left'>
                 Block
               </th>
+              <th scope='col' className='px-6 py-3 text-left'>
+                Cover Image
+              </th>
             </tr>
           </thead>
           <tbody>
-            {vendorInSinglePage.map(vendor => (
+            {studioInSinglePage.map(studio => (
               <tr
-                key={vendor._id}
+                key={studio._id}
                 className='bg-white border-b dark:bg-gray-800 dark:border-gray-700 group'
               >
                 <td className='px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white'>
-                  {vendor?._id}
+                  {studio?._id}
                 </td>
-                <td className='px-6 py-4 text-left'>{vendor.name}</td>
                 <td className='px-6 py-4 text-left'>
-                  {vendor.studioInfo.studioName}
+                  {studio.studioInfo.studioName}
                 </td>
-                <td className='px-6 py-4 text-left'>{vendor.mobile}</td>
-                <td className='px-6 py-4 text-left'>{vendor.email}</td>
+                <td className='px-6 py-4 text-left'>
+                  {studio.studioInfo.city}
+                </td>
+                <td className='px-6 py-4 text-left'> </td>
+                <td className='px-6 py-4 text-left'>
+                  {studio.studioInfo.description}
+                </td>
 
                 <td className='px-6 py-4 text-left'>
-                  {vendor.isVerified ? (
+                  {studio.studioInfo.isVerified ? (
                     <div className='flex items-center'>
                       <div className='h-2.5 w-2.5 rounded-full bg-green-700 mr-2' />{' '}
                       Verified
@@ -129,20 +130,21 @@ function VendorList () {
                   )}
                 </td>
                 <td className='px-6 py-4 text-left'>
-                  <div className='relative'>
-                    <Button
-                      onClick={() =>
-                        handleBlockVendor(vendor._id, vendor.isBlocked)
-                      }
-                      className={`absolute transition-opacity duration-200 ease-in-out ${
-                        vendor.isBlocked
-                          ? 'bg-red-500 text-white opacity-100'
-                          : 'bg-green-500 text-white opacity-100'
-                      }`}
-                    >
-                      {vendor.isBlocked ? 'Unblock' : 'Block'}
-                    </Button>
-                  </div>
+                  <Button
+                    onClick={() =>
+                      handleBlockStudio(
+                        studio.studioInfo._id,
+                        studio.studioInfo.isBlocked
+                      )
+                    }
+                    className={`absolute  group-hover:opacity-100 transition-opacity duration-200 ease-in-out ${
+                      studio.studioInfo.isBlocked
+                        ? 'bg-red-500 text-white'
+                        : 'bg-green-500 text-white'
+                    }`}
+                  >
+                    {studio.studioInfo.isBlocked ? 'Unblock' : 'Block'}
+                  </Button>
                 </td>
               </tr>
             ))}
@@ -161,4 +163,4 @@ function VendorList () {
   )
 }
 
-export default VendorList
+export default StudioList

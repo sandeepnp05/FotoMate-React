@@ -24,7 +24,6 @@ function VendorHero ({studio}) {
     setStudio(storedStudio);
   }
 }, []);
- console.log(isStudio,'studiooooooooo')
 
 
   const vendorId = _id
@@ -71,22 +70,36 @@ function VendorHero ({studio}) {
     const files = Array.from(e.target.files)
     const isValid = files.every(
       file =>
-        file.type.startsWith('image/png') || file.type.startsWith('image/png')
+        file.type.startsWith('image/jpeg') || file.type.startsWith('image/png')
     )
+    console.log('Image types:', files.map(file => file.type));
     if (isValid) {
       setGalleryImageToBase(files)
     }
   }
+  
 
   const setGalleryImageToBase = async files => {
     for (let i = 0; i < files.length; i++) {
-      const reader = new FileReader()
-      reader.readAsDataURL(files[i])
-      reader.onloadend = () => {
-        setGalleryImage(prev => [...prev, reader.result])
-      }
+      const reader = new FileReader();
+  
+      reader.readAsDataURL(files[i]);
+  
+      reader.onload = () => {
+        setGalleryImage(prev => [...prev, reader.result]);
+  
+       
+        if (i === files.length - 1) {
+          console.log('All images processed:', galleryImages);
+        }
+      };
+  
+      reader.onerror = error => {
+        console.error('Error converting image:', error);
+      };
     }
-  }
+  };
+  
   const setCoverImageToBase = async file => {
     const reader = new FileReader()
     reader.readAsDataURL(file)
@@ -320,8 +333,7 @@ function VendorHero ({studio}) {
                         rows={4}
                         maxLength={200} // Add a character limit
                         className='input input-bordered input-lg w-full bg-blue-gray-50'
-                        placeholder='Write a brief description' // More descriptive placeholder
-                        required=''
+                        placeholder='Write a brief description' 
                       />
                       {errors.description && touched.description && (
                         <div className='text-red-500 text-sm'>

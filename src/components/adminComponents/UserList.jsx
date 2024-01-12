@@ -51,6 +51,9 @@ function UserList () {
   const userInSinglePage = filteredData.slice(firstIndex, lastIndex)
   const totalPages = Math.ceil(filteredData.length / dataPerPage)
   const numbers = [...Array(totalPages + 1).keys()].slice(1)
+  console.log(numbers,'numbers')
+    console.log(totalPages,'totalPages')
+    console.log(userInSinglePage,'userInSinglePage')
   return (
     <>
       <div className={`mx-4 overflow-x-auto `}>
