@@ -1,6 +1,5 @@
 import { initializeApp } from "firebase/app";
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: "fotomate-photography.firebaseapp.com",
@@ -12,5 +11,4 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
-// Export the initialized Firebase app
 export { app };

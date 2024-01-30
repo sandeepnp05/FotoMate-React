@@ -58,11 +58,14 @@ function UserLogin() {
   return (
     <>
       <div
-        className='flex flex-col bg-cover md:bg-contain lg:bg-cover min-h-screen'
+        className='flex flex-col bg-cover md:bg-contain lg:bg-cover min-h-screen  bg-black bg-opacity-50'
         style={{
           backgroundImage: "url('/src/assets/wedding1.jpg')",
         }}
      >
+      <div
+    className='absolute w-full bg-cover  min-h-full'
+  />
         <UserNavbar></UserNavbar>
         <div className='mt-8 p-4 md:p-8 lg:w-1/2'>
           <div className='hero-content flex-col lg:flex-row-reverse text-black'>
@@ -93,7 +96,7 @@ function UserLogin() {
                     required
                   />
                   {errors.email && touched.email && (
-                    <p className='text-red-500 '>{errors.email}</p>
+                    <p className='text-red-600 text-xs '>{errors.email}</p>
                   )}
                 </div>
                 <div className='form-control'>
@@ -113,7 +116,7 @@ function UserLogin() {
                     required
                   />
                   {errors.password && touched.password && (
-                    <p className='text-red-500 '>{errors.password}</p>
+                    <p className='text-red-600 text-xs'>{errors.password}</p>
                   )}
                   <label htmlFor='password' className='label text-black'>
                     <Link to='/forgotPassword'>Forgot password?</Link>

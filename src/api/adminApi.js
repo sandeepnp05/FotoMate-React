@@ -69,14 +69,29 @@ export const blockStudio = async ( studioId, status ) => {
   }
   export const singleCategory = async (cat_id)=>{
     try {
-        console.log(cat_id,'apiiiiiiiiiii')
         const data = await adminAxioseInstance.get(`/singleCategory/${cat_id}`)
         return data;
     } catch (error) {
         console.log(error)
     }
   } 
-  
+  export const edit_category = async(cat_id,name,description)=>{
+    try {
+        console.log('from api')
+        console.log(cat_id,name,description,'cat_id,name,description from api')
+        const data = await adminAxioseInstance.patch(`/editCategory/${cat_id}`,{cat_id,name,description})
+        return data;
+    } catch (error) {
+        console.log(error)
+        throw error
+    }
+  }
+
+  export const unlistCategory = async(_id,status)=>{
+    const data = await adminAxioseInstance.patch('/categoryList',{_id,status});
+    return data;
+  }
+
   export const add_subcategory = async(cat_id,values,baseImage)=>{
     try {
         const data = await adminAxioseInstance.post(`/addSubCategory`,{cat_id,values,baseImage})
@@ -93,4 +108,10 @@ export const blockStudio = async ( studioId, status ) => {
     } catch (error) {
         console.log(error.message)
     }
+  }
+
+
+  export const getBookingList = async()=>{
+    const data = await adminAxioseInstance.get('/bookingList')
+    return data;
   }

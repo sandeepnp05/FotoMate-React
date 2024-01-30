@@ -1,47 +1,73 @@
-import React, { useState, useEffect } from 'react'
-import { vendorList } from '../../api/userApi'
+import React, { useRef, useEffect } from 'react'
+import { studioList } from '../../api/userApi'
 import { Link } from 'react-router-dom'
 import Loading from '../common/Loading'
+import { useQuery, useInfiniteQuery } from '@tanstack/react-query'
 
-function Gallery () {
-  const [vendors, setVendors] = useState(null)
-  const [loading,setLoading] = useState(true)
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await vendorList();
-        const studio = res.data;
-        console.log(studio, 'result');
-        setVendors(studio);
-      } catch (error) {
-        console.log(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+function Gallery ({ catId }) {
+  const loadMoreButtonRef = useRef()
+
+  const fetchStudios = async ({ pageParam = 1 }) => {
+    const res = await studioList(catId, pageParam);
+    console.log('Fetched studios:', res.data.studios); // Log fetched studios
+    return res.data; // Return the entire data object
+  };
   
-    fetchData();
-  }, []);
- if (loading) {
-  return(
-    <div className="flex items-center justify-center h-screen">
-        <Loading/>
-      </div>
-  )
- }  
+
+  const { data, fetchNextPage, hasNextPage, isLoading, isError } =
+  useInfiniteQuery({
+    queryKey: ['studios', catId],
+    queryFn: fetchStudios,
+    getNextPageParam: (lastPage, pages) => {
+      console.log('Last page:', lastPage); // Log last page
+      return lastPage.nextPage;
+    },
+  });
+
+
+  useEffect(() => {
+    if (isLoading || isError || !hasNextPage) return;
+  
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !isLoading && hasNextPage) {
+          console.log('Intersection observed, fetching next page');
+          fetchNextPage();
+        }
+      },
+      { threshold: 1 }
+    );
+  
+    const el = loadMoreButtonRef.current;
+    if (!el) return;
+  
+    observer.observe(el);
+  
+    return () => observer.unobserve(el);
+  }, [isLoading, isError, hasNextPage, fetchNextPage]);
+
+  if (isLoading) {
+    return <Loading />
+  }
+
+  if (isError) {
+    return <p>Error fetching studios</p>
+  }
+
+
   return (
     <>
-      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 sm:gap-4 sm:px-6 mb-6 md:px-10 lg:px-12'>
-        {vendors &&
-          vendors.map(vendor => (
+      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4  sm:gap-4 sm:px-6 mb-6  px-8 md:px-10 lg:px-12'>
+        {data.pages.map((page, pageIndex) =>
+          page.studios.map((studio, studioIndex) => (
             <div
-              key={vendor._id}
-              className='card  bg-base-100 shadow-xl transform transition duration-500 ease-in-out hover:scale-105 sm:p-2'
+              key={`page-${pageIndex}-studio-${studioIndex}`}
+              className='card  bg-base-100 shadow-xl transform transition duration-500 ease-in-out hover:scale-105 my-7 sm:my-4 sm:p-2'
             >
               <figure>
                 <img
-                  src={vendor.studioInfo.coverImage}
-                  alt={vendor.studioInfo.studioName}
+                  src={studio.coverImage}
+                  alt={studio.name}
                   className='w-full h-48 object-cover'
                 />
               </figure>
@@ -67,7 +93,7 @@ function Gallery () {
                     />
                   </svg>
 
-                 <span className='font-semibold'>{vendor.studioInfo.studioName}</span>
+                  <span className='font-semibold'>{studio.studioName}</span>
                 </p>
                 <p className='flex items-center'>
                   <svg
@@ -89,12 +115,11 @@ function Gallery () {
                       d='M15 11a3 3 0 11-6 0 3 3 0 016 0z'
                     />
                   </svg>
-                  {vendor.studioInfo.city}
+                  {studio.cities[0]||studio.city}
                 </p>
-                {/* <p>{vendor.studioInfo.description}</p> */}
 
                 <div className='card-actions'>
-                  <Link to={`/studio/${vendor._id}`}>
+                  <Link to={`/studio/${studio._id}`}>
                     <button className='btn btn-outline stroke-2 btn-error hover:text-white'>
                       View Studio
                     </button>
@@ -102,10 +127,20 @@ function Gallery () {
                 </div>
               </div>
             </div>
-          ))}
+          ))
+        )}
       </div>
+      {isLoading && <Loading />}
+    {isError && <p>Error fetching studios</p>}
+    {data.pages.length === 0 && !isLoading && !isError && (
+      <p>No studios available.</p>
+    )
+    }
+    <div className='flex justify-center items-center my-4'> 
+      <div ref={loadMoreButtonRef}>{hasNextPage && <span className="loading loading-spinner bg-gray-500 loading-lg"></span>}</div>
+    </div>
+
     </>
   )
 }
-
 export default Gallery

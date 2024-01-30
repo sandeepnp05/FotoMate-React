@@ -11,6 +11,7 @@ function VendorSignup () {
 
   const onSubmit = async () =>{
     try {
+      console.log("Submit button clicked");
       const res = await vendorSignup(values)
       if(res?.status === 201){
         const {vendor, otpId} = res.data;
@@ -71,6 +72,11 @@ function VendorSignup () {
                   placeholder='Full Name'
                   required
                 />
+                {errors.name && touched.name && (
+                    <p className='text-red-700 text-xs dark:text-red-500 h-4'>
+                      {errors.name}
+                    </p>
+                  )}
               </div>
               <div className='mb-4'>
                 <label htmlFor='your-email' className='sr-only'>
@@ -82,11 +88,17 @@ function VendorSignup () {
                   value={values.email}
                   onChange={handleChange}
                   onBlur={handleBlur}
+                   autoComplete='email'
                   id='your-email'
                   className='w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
                   placeholder='Email'
                   required
                 />
+                {errors.email && touched.email && (
+                    <p className='text-red-700 text-xs dark:text-red-500'>
+                      {errors.email}
+                    </p>
+                  )}
               </div>
               <div className='mb-4'>
                 <label htmlFor='your-mobile-number' className='sr-only'>
@@ -103,6 +115,11 @@ function VendorSignup () {
                   placeholder='Mobile'
                   required
                 />
+                {errors.mobile && touched.mobile && (
+                    <p className='text-red-700 text-xs dark:text-red-500'>
+                      {errors.mobile}
+                    </p>
+                  )}
               </div>
 
               <div className='mb-4'>
@@ -115,11 +132,17 @@ function VendorSignup () {
                   value={values.password}
                   onChange={handleChange}
                   onBlur={handleBlur}
+                  autoComplete='new-password'
                   id='password'
                   className='w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
                   placeholder='Password'
                   required
                 />
+                {errors.password && touched.password && (
+                    <p className='text-red-700 text-xs dark:text-red-500'>
+                      {errors.password}
+                    </p>
+                  )}
               </div>
               <div className='mb-6'>
                 <label htmlFor='confirm-password' className='sr-only'>
@@ -132,10 +155,16 @@ function VendorSignup () {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   id='confirm-password'
+                   autoComplete='new-password'
                   className='w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
                   placeholder='Confirm Password'
                   required
                 />
+                {errors.cpassword && touched.cpassword && (
+                    <p className='text-red-700 text-xs dark:text-red-500'>
+                      {errors.cpassword}
+                    </p>
+                  )}
               </div>
               <div className='text-center'>
                 <button
@@ -149,12 +178,12 @@ function VendorSignup () {
             <p className='mt-6 text-center text-sm text-gray-600'>
               Already have an account ? 
               <Link to='/vendor/login'>
-                <a
-                  href='#'
+                <span
+                 
                   className='text-blue-500 hover:text-blue-700 no-underline'
                 >
                  {'  '} Login
-                </a>
+                </span>
               </Link>
             </p>
           </div>

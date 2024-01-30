@@ -31,7 +31,6 @@ function StudioList () {
       const res = await blockStudio(studioId, status);
   
       if (res.status === 201 && res.data.message === 'updated') {
-        // Assuming studioData is the state holding studio information
         const updatedData = studioData.map((studio) => {
           if (studio.studioInfo._id === studioId) {
             return {
@@ -42,7 +41,6 @@ function StudioList () {
           return studio;
         });
   
-        // Assuming setStudioData is a function to update the studio information in the state
         setStudioData(updatedData);
         toast.success(`Studio ${status ? 'unblocked' : 'blocked'} successfully`);
       } else {

@@ -4,24 +4,43 @@ import { UserNavbar } from './UserNavbar';
 import { initFlowbite } from 'flowbite';
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { getBooking, getUserDetails } from '../../api/userApi';
 
 
 const ViewUserProfile = () => {
+
     const { user } = useSelector((state) => state.userReducer);
     useEffect(() => {
         initFlowbite();
       }, []);
 
+      const { data, isError, isLoading } = useQuery({
+        queryKey: ['booking', user._id], 
+        queryFn: () => getBooking(user._id)
+      });
+      console.log(user._id,'userid')
+      console.log(data,'data')
+
+      if (isLoading) {
+          return <div>Loading...</div>;
+      }
+  
+      if (isError) {
+          return <div>Error occurred while fetching user details</div>;
+      }
   return (
     <>
       <UserNavbar />
-      <div className='flex flex-col items-center justify-center mt-40 md:mt-0 w-full md:h-screen'>
-        <div className="w-full max-w-md bg-white border border-gray-200 dark:bg-gray-800 dark:border-gray-700 shadow-md rounded-lg p-4">
+      <div className='flex flex-col md:flex-row w-full mx-auto mt-10 md:mt-36 items-center justify-center flex-wrap'>
+        {/* left div */}
+        <div className='w-full md:w-1/2 mt-24 md:mt-0 flex-grow mb-4 md:mb-0 p-4 md:p-20'>
+        <div className="w-full max-w-md bg-white border border-gray-300 dark:bg-gray-800 dark:border-gray-700  p-4">
           <div className="flex justify-end">
             <button
               id="dropdownButton"
               data-dropdown-toggle="dropdown"
-              className="inline-block text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-1.5"
+              className="inline-block text-gray-600 dark:-gray-400text hover:bg-gray-100 dark:hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-1.5"
               type="button"
             >
               <span className="sr-only">Open dropdown</span>
@@ -68,8 +87,36 @@ const ViewUserProfile = () => {
             <span className="text-lg text-gray-600 dark:text-gray-400">
               Wallet Balance: {user.wallet}
             </span>
+            <Link to={'/booking'}>
+            <span className="text-lg text-primary dark:text-gray-400">
+             View Bookings
+            </span>
+            </Link>
+
           </div>
         </div>
+
+
+        
+      </div>
+       {/* rightdiv */}
+       
+     
+
+{/* 
+       <div className='w-full md:w-1/2 flex-grow flex items-center justify-center'>
+       <div className='flex flex-col items-center justify-center pl-0 md:pr-36'>
+           <h5>You haven't booked studio yet</h5>
+
+          <img
+         className='h-4/3 w-full md:h-auto md:w-4/5 object-cover'
+            src={
+              'https://res.cloudinary.com/dti7ahrb6/image/upload/v1705293156/Assets/BookingImage.jpg'
+            }
+            alt='Profile'
+            />
+            </div>
+        </div> */}
       </div>
     </>
   );

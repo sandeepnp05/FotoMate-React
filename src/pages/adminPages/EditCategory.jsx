@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../../components/adminComponents/Sidebar';
-import { useParams } from 'react-router-dom';
-import { singleCategory } from '../../api/adminApi';
+import { useNavigate, useParams } from 'react-router-dom';
+import { edit_category, singleCategory } from '../../api/adminApi';
 import { useFormik } from 'formik';
+import { toast } from 'react-toastify';
 
 function EditCategory() {
+    const navigate = useNavigate()
     const [category, setCategory] = useState({});
     const { cat_id } = useParams();
+    console.log(cat_id,'cat_idllllll')
 
     useEffect(() => {
         const fetchData = async () => {
@@ -20,6 +23,22 @@ function EditCategory() {
         fetchData();
     }, [cat_id]);
      console.log(category,'category')
+     
+   async  function handleEdit(values){
+    try {
+      const {name,description} = values;
+      console.log(name,description,'name,description')
+      const res = await edit_category(cat_id,name,description)
+      if (res.status===201) {
+        toast.success(res.data.message);
+      }
+      navigate('/admin/categoryList')
+    } catch (error) {
+      console.log(error.message)
+      toast.error('Error Editing category')
+    }
+   }
+
     const {
         values,
         handleBlur,
@@ -31,11 +50,7 @@ function EditCategory() {
             name: category.name || '',
             description: category.description || '', 
         },
-        onSubmit: async (formValues) => {
-            
-            console.log('Form values:', formValues);
-            
-        },
+        onSubmit:handleEdit,
         enableReinitialize: true,
     });
   return (
@@ -46,7 +61,7 @@ function EditCategory() {
         <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
           Edit Category
         </h2>
-        <form >
+        <form onSubmit={handleSubmit}>
           <div className="grid gap-4 mb-4 sm:grid-cols-2 sm:gap-6 sm:mb-5">
             <div className="sm:col-span-2">
               <label

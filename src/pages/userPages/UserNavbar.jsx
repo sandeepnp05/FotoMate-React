@@ -105,7 +105,7 @@ export function UserNavbar ({userImage}) {
                 <ul className='space-y-1'>
                   <li className='px-2 py-1 hover:bg-gray-100'>
                     <Link
-                      to={'/profile'}
+                      to={'/viewProfile'}
                       className='text-gray-900 text-sm font-medium block'
                     >
                       Profile

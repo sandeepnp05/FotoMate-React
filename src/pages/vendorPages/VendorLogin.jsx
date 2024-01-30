@@ -24,6 +24,7 @@ function VendorLogin () {
                     })
                 )
                 toast.success(res?.data?.message)
+              
                 navigate("/vendor",{state:{studio}})
             }
         } catch (error) {
@@ -73,7 +74,7 @@ function VendorLogin () {
                   required
                 />
                 {errors.email && touched.email}
-                <p className='text-red-600'>{errors.email}</p>
+                <p className='text-red-600 text-xs'>{errors.email}</p>
               </div>
 
               <div className='mb-4'>
@@ -87,10 +88,13 @@ function VendorLogin () {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   id='password'
+                  autoComplete='password'
                   className='w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
                   placeholder='Password'
                   required
                 />
+                {errors.password && touched.password}
+                <p className='text-red-600 text-xs'>{errors.password}</p>
               </div>
 
               <div className='text-center'>

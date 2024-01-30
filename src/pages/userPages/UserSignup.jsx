@@ -1,30 +1,30 @@
-import React from 'react';
-import { useFormik } from 'formik';
-import { userSchema } from '../../validations/user/userSignupValidation';
-import { userSignup } from '../../api/userApi';
-import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { Button } from '@material-tailwind/react';
-import { UserNavbar } from './UserNavbar';
-import Oauth from '../../components/userComponents/Oauth';
+import React from 'react'
+import { useFormik } from 'formik'
+import { userSchema } from '../../validations/user/userSignupValidation'
+import { userSignup } from '../../api/userApi'
+import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import { Button } from '@material-tailwind/react'
+import { UserNavbar } from './UserNavbar'
+import Oauth from '../../components/userComponents/Oauth'
 
 const UserSignup = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
-  async function onSubmit() {
+  async function onSubmit () {
     try {
-      const res = await userSignup(values);
+      const res = await userSignup(values)
       if (res?.status === 201) {
-        const { user, otpId } = res.data;
-        toast(res?.data?.status);
+        const { user, otpId } = res.data
+        toast(res?.data?.status)
         navigate('/otp', {
-          state: { userEmail: user.email, otpId: otpId, userId: user._id },
-        });
+          state: { userEmail: user.email, otpId: otpId, userId: user._id }
+        })
       }
     } catch (error) {
-      console.log(error);
-      toast.error(error.response?.data?.status);
+      console.log(error)
+      toast.error(error.response?.data?.status)
     }
   }
 
@@ -35,29 +35,29 @@ const UserSignup = () => {
     handleBlur,
     handleChange,
     handleSubmit,
-    isSubmitting,
+    isSubmitting
   } = useFormik({
     initialValues: {
       name: '',
       email: '',
       mobile: '',
       password: '',
-      cpassword: '',
+      cpassword: ''
     },
     validationSchema: userSchema,
-    onSubmit,
-  });
+    onSubmit
+  })
 
   return (
     <>
       <div
         className='flex flex-col bg-cover md:bg-contain lg:bg-cover min-h-screen'
         style={{
-          backgroundImage: "url('/src/assets/wedding1.jpg')",
+          backgroundImage: "url('/src/assets/wedding1.jpg')"
         }}
       >
         <UserNavbar></UserNavbar>
-        
+
         <div className='mt-8 p-4 md:p-4 lg:w-1/2'>
           <div className='hero-content flex-col lg:flex-row-reverse text-black'>
             <div className='text-center lg:text-left'></div>
@@ -66,7 +66,7 @@ const UserSignup = () => {
               style={{
                 backdropFilter: 'blur(1px)',
                 borderRadius: '20px',
-                background: 'rgba(255, 255, 255, 0.3)',
+                background: 'rgba(255, 255, 255, 0.3)'
               }}
             >
               <form onSubmit={handleSubmit} className='card-body'>
@@ -85,7 +85,7 @@ const UserSignup = () => {
                     required
                   />
                   {errors.name && touched.name && (
-                    <p className='text-red-700 dark:text-red-500'>
+                    <p className='text-red-700 text-xs dark:text-red-500'>
                       {errors.name}
                     </p>
                   )}
@@ -105,7 +105,7 @@ const UserSignup = () => {
                     required
                   />
                   {errors.email && touched.email && (
-                    <p className='text-red-700 dark:text-red-50'>
+                    <p className='text-red-700 text-xs dark:text-red-50'>
                       {errors.email}
                     </p>
                   )}
@@ -125,7 +125,7 @@ const UserSignup = () => {
                     required
                   />
                   {errors.mobile && touched.mobile && (
-                    <p className='text-red-700 dark:text-red-500'>
+                    <p className='text-red-700 text-xs dark:text-red-500'>
                       {errors.mobile}
                     </p>
                   )}
@@ -148,7 +148,7 @@ const UserSignup = () => {
                     />
                   </div>
                   {errors.password && touched.password && (
-                    <p className='text-red-700 dark:text-red-500'>
+                    <p className='text-red-700 text-xs dark:text-red-500'>
                       {errors.password}
                     </p>
                   )}
@@ -170,7 +170,7 @@ const UserSignup = () => {
                     autoComplete='new-password'
                   />
                   {errors.cpassword && touched.cpassword && (
-                    <p className='text-red-700 dark:text-red-500'>
+                    <p className='text-red-700 text-xs dark:text-red-500'>
                       {errors.cpassword}
                     </p>
                   )}
@@ -199,7 +199,7 @@ const UserSignup = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default UserSignup;
+export default UserSignup

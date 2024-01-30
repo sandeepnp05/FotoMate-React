@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, useNavigate,useLocation } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useState } from 'react'
 import { Button } from '@material-tailwind/react'
 import { useSelector } from 'react-redux'
@@ -8,23 +8,31 @@ import { useFormik } from 'formik'
 import { studioSchema } from '../../../validations/vendor/studioValidationSchema'
 import { addStudio } from '../../../api/vendorApi'
 import { useEffect } from 'react'
+import { Multiselect } from 'multiselect-react-dropdown'
+import { getCategories } from '../../../api/userApi'
+import { useQuery } from '@tanstack/react-query'
 
-function VendorHero ({studio}) {
+function VendorHero ({ studio }) {
   const [isModalOpen, setModalOpen] = useState(false)
   const [coverImage, setCoverImage] = useState('')
   const [galleryImages, setGalleryImage] = useState([])
   const [isLoading, setLoading] = useState(false)
-  const [isStudio,setStudio] = useState(null)
+  const [isStudio, setStudio] = useState(null)
+  const [category, setCategory] = useState([])
+  const [cities, setCities] = useState([])
+  const [cityName, setCityName] = useState('')
+  const [buttonDisplay, setButtonDisplay] = useState('none')
+  console.log(cities, 'cities')
+  // const [selectedCat, setSelectedCat] = useState([])
   const navigate = useNavigate()
   const { _id } = useSelector(state => state.vendorReducer.vendor)
- 
-  useEffect(() => {
-  const storedStudio = JSON.parse(localStorage.getItem('studio'));
-  if (storedStudio) {
-    setStudio(storedStudio);
-  }
-}, []);
 
+  useEffect(() => {
+    const storedStudio = JSON.parse(localStorage.getItem('studio'))
+    if (storedStudio) {
+      setStudio(storedStudio)
+    }
+  }, [])
 
   const vendorId = _id
   const handleModalToggle = () => {
@@ -38,9 +46,11 @@ function VendorHero ({studio}) {
         ...values,
         coverImage,
         galleryImages: galleryImages.map(imageUrl => imageUrl),
-        vendorId
+        vendorId,
+        selectedCat: values.selectedCat.map(category => category.name),
+        cities
       })
-    
+
       if (res.status === 201) {
         setStudio(true)
         navigate(`/vendor/studio/${vendorId}`, { state: { vendorId } })
@@ -72,34 +82,35 @@ function VendorHero ({studio}) {
       file =>
         file.type.startsWith('image/jpeg') || file.type.startsWith('image/png')
     )
-    console.log('Image types:', files.map(file => file.type));
+    console.log(
+      'Image types:',
+      files.map(file => file.type)
+    )
     if (isValid) {
       setGalleryImageToBase(files)
     }
   }
-  
 
   const setGalleryImageToBase = async files => {
     for (let i = 0; i < files.length; i++) {
-      const reader = new FileReader();
-  
-      reader.readAsDataURL(files[i]);
-  
+      const reader = new FileReader()
+
+      reader.readAsDataURL(files[i])
+
       reader.onload = () => {
-        setGalleryImage(prev => [...prev, reader.result]);
-  
-       
+        setGalleryImage(prev => [...prev, reader.result])
+
         if (i === files.length - 1) {
-          console.log('All images processed:', galleryImages);
+          console.log('All images processed:', galleryImages)
         }
-      };
-  
+      }
+
       reader.onerror = error => {
-        console.error('Error converting image:', error);
-      };
+        console.error('Error converting image:', error)
+      }
     }
-  };
-  
+  }
+
   const setCoverImageToBase = async file => {
     const reader = new FileReader()
     reader.readAsDataURL(file)
@@ -108,17 +119,57 @@ function VendorHero ({studio}) {
     }
   }
 
+  //////////////////////////////////ADD CITIES //////////////////////////////
+  const handleRemoveCity = index => {
+    const updatedCities = [...cities]
+    updatedCities.splice(index, 1)
+    setCities(updatedCities)
+  }
+
+  const handleAddCities = () => {
+    console.log('City Name:', cityName)
+    if (cityName) {
+      const newCity = {
+        cityName
+      }
+      setCities(prevCities => [...prevCities, newCity])
+      setCityName('')
+    } else {
+      console.log('Please enter city name')
+    }
+  }
+
+  const updateButtonDisplay = cityName => {
+    if (cityName) {
+      setButtonDisplay('inline-block')
+    } else {
+      setButtonDisplay('none')
+    }
+  }
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  const { error, data } = useQuery({
+    queryKey: ['category'],
+    queryFn: () => getCategories()
+  })
+
+  console.log(data, 'data')
+  const options = data?.map(item => ({ name: item.name }))
+  console.log(options, 'options')
+
   const { errors, handleBlur, handleChange, handleSubmit, values, touched } =
     useFormik({
       initialValues: {
         studioName: '',
+        description: '',
         location: '',
-        description: ''
+        selectedCat: []
       },
       // validationSchema: studioSchema,
       onSubmit
     })
-
+  console.log(options, 'options')
   return (
     <>
       <section className='bg-black dark:bg-gray-900'>
@@ -128,7 +179,7 @@ function VendorHero ({studio}) {
               Enhance your wedding business with top industry leaders preferred
               by couples.
             </h1>
-            <p className='max-w-2xl mb-6 font-light text-gray-500 lg:mb-8 md:text-lg lg:text-xl text-gray-300'>
+            <p className='max-w-2xl mb-6 font-light text-gray-500 lg:mb-8 md:text-lg lg:text-xl'>
               Elevate your photography business with our comprehensive studio
               management tools. From creating and customizing your studio
               profile to managing bookings seamlessly, our platform empowers
@@ -136,33 +187,31 @@ function VendorHero ({studio}) {
               unforgettable moments.
             </p>
 
-       
+            {vendorId && !isStudio && (
+              <button
+                onClick={handleModalToggle}
+                type='button'
+                className='inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-gray-400 border border-gray-300 rounded-lg hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-500 dark:text-white dark:border-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-400'
+              >
+                Get Started
+              </button>
+            )}
 
-{vendorId && !isStudio && (
-        <button
-          onClick={handleModalToggle}
-          type='button'
-          className='inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-gray-400 border border-gray-300 rounded-lg hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-500 dark:text-white dark:border-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-400'
-        >
-          Get Started
-        </button>
-      )}
+            {!vendorId && !isStudio && (
+              <Link to='/vendor/login'>
+                <button className='inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-gray-400 border border-gray-300 rounded-lg hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-500 dark:text-white dark:border-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-400'>
+                  Log In
+                </button>
+              </Link>
+            )}
 
-      {!vendorId && !isStudio && (
-        <Link to='/vendor/login'>
-          <button className='inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-gray-400 border border-gray-300 rounded-lg hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-500 dark:text-white dark:border-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-400'>
-            Log In
-          </button>
-        </Link>
-      )}
-
-      {isStudio && (
-        <Link to={`/vendor/studio/${vendorId}`}>
-          <button className='inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-gray-400 border border-gray-300 rounded-lg hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-500 dark:text-white dark:border-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-400'>
-            View Studio
-          </button>
-        </Link>
-      )}
+            {isStudio && (
+              <Link to={`/vendor/studio/${vendorId}`}>
+                <button className='inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-gray-400 border border-gray-300 rounded-lg hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-500 dark:text-white dark:border-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-400'>
+                  View Studio
+                </button>
+              </Link>
+            )}
           </div>
           <div className='hidden lg:mt-0 lg:col-span-5 lg:flex'>
             <img src='/src/assets/camera2.png' alt='mockup' />
@@ -231,7 +280,7 @@ function VendorHero ({studio}) {
                         value={values.studioName}
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        className='input input-bordered w-full bg-blue-gray-50'
+                        className='input input-bordered w-full bg-blue-gray-50 mb-2'
                         placeholder='Type studio name'
                         required=''
                       />
@@ -240,8 +289,7 @@ function VendorHero ({studio}) {
                           {errors.studioName}
                         </div>
                       )}
-                    </div>
-                    <div className='col-span-2'>
+                       <div className='col-span-2'>
                       <label
                         htmlFor='name'
                         className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
@@ -255,8 +303,8 @@ function VendorHero ({studio}) {
                         value={values.location}
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        className='input input-bordered w-full bg-blue-gray-50'
-                        placeholder='city'
+                        className='input input-bordered w-full bg-blue-gray-50 mb-2'
+                        placeholder='location'
                         required=''
                       />
                       {touched.location && errors.location && (
@@ -267,6 +315,113 @@ function VendorHero ({studio}) {
                       )}
                     </div>
 
+                    <div className='col-span-2'>
+                      <label
+                        htmlFor='cityName'
+                        className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
+                      >
+                      Type and add service locations.
+                      </label>
+                      <input
+                        type='text'
+                        name='cityName'
+                        id='cityName'
+                        value={cityName}
+                        onChange={e => {
+                          console.log('Input Value:', e.target.value) // Log the input value
+                          setCityName(e.target.value)
+                          updateButtonDisplay(e.target.value)
+                        }}
+                        className='input input-bordered w-full bg-blue-gray-50'
+                        placeholder='city'
+                      />
+
+                      <div className='col-span-2 md:col-span-1 mt-2'>
+                        <button
+                          type='button'
+                          className=' inline-block rounded-lg bg-gray-900 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-neutral-50 shadow-[0_4px_9px_-4px_rgba(51,45,45,0.7)] transition duration-150 ease-in-out hover:bg-neutral-800 hover:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] focus:bg-neutral-800 focus:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] focus:outline-none focus:ring-0 active:bg-neutral-900 active:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] dark:bg-neutral-900 dark:shadow-[0_4px_9px_-4px_#030202] dark:hover:bg-neutral-900 dark:hover:shadow-[0_8px_9px_-4px_rgba(3,2,2,0.3),0_4px_18px_0_rgba(3,2,2,0.2)] dark:focus:bg-neutral-900 dark:focus:shadow-[0_8px_9px_-4px_rgba(3,2,2,0.3),0_4px_18px_0_rgba(3,2,2,0.2)] dark:active:bg-neutral-900 dark:active:shadow-[0_8px_9px_-4px_rgba(3,2,2,0.3),0_4px_18px_0_rgba(3,2,2,0.2)]'
+                          data-te-ripple-init=''
+                          data-te-ripple-color='light'
+                          onClick={handleAddCities}
+                          style={{ display: buttonDisplay }}
+                          disabled={!cityName}
+                        >
+                          Add +
+                        </button>
+                      </div>
+                    </div>
+                    {cities.length > 0 && (
+                      <div className='mb-4'>
+                        <h6 className='mb-2 text-lg font-medium text-neutral-800 dark:text-neutral-50'>
+                          Added Cities
+                        </h6>
+
+                        <ul>
+                          {cities.map((cities, index) => (
+                            <li key={index} className='mb-1'>
+                              <span
+                                id={`badge-dismiss-${cities.cityName}`}
+                                className='inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-green-800 bg-green-100 rounded dark:bg-green-900 dark:text-green-300'
+                              >
+                                {`${cities.cityName}`}
+                                <button
+                                  type='button'
+                                  className='inline-flex items-center p-1 ms-2 text-sm text-green-400 bg-transparent rounded-sm hover:bg-green-200 hover:text-green-900 dark:hover:bg-green-800 dark:hover:text-green-300'
+                                  data-dismiss-target={`#badge-dismiss-${cities.cityName}`}
+                                  aria-label='Remove'
+                                  onClick={() => handleRemoveCity(index)}
+                                >
+                                  <svg
+                                    className='w-2 h-2'
+                                    aria-hidden='true'
+                                    xmlns='http://www.w3.org/2000/svg'
+                                    fill='none'
+                                    viewBox='0 0 14 14'
+                                  >
+                                    <path
+                                      stroke='currentColor'
+                                      strokeLinecap='round'
+                                      strokeLinejoin='round'
+                                      strokeWidth='2'
+                                      d='m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6'
+                                    />
+                                  </svg>
+                                  <span className='sr-only'>Remove badge</span>
+                                </button>
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    <div className='col-span-2 z-10'>
+                      <label
+                        htmlFor='category'
+                        className='block mb-2 text-sm  t font-medium text-gray-900 dark:text-white'
+                      >
+                        Category
+                      </label>
+                      <Multiselect
+                        options={options}
+                        value={values.selectedCat} // Use values.selectedCat
+                        onSelect={selectedList => {
+                          handleChange({
+                            target: { name: 'selectedCat', value: selectedList }
+                          })
+                        }}
+                        onRemove={selectedList => {
+                          handleChange({
+                            target: { name: 'selectedCat', value: selectedList }
+                          })
+                        }}
+                        labelledBy={'Select'}
+                        isCreatable={true}
+                        displayValue='name'
+                        closeOnSelect={false}
+                        className='text-gray-900 w-full bg-blue-gray-50'
+                      />
+                    </div>
                     <div className='col-span-2'>
                       <label
                         htmlFor='galleryImage'
@@ -333,7 +488,7 @@ function VendorHero ({studio}) {
                         rows={4}
                         maxLength={200} // Add a character limit
                         className='input input-bordered input-lg w-full bg-blue-gray-50'
-                        placeholder='Write a brief description' 
+                        placeholder='Write a brief description'
                       />
                       {errors.description && touched.description && (
                         <div className='text-red-500 text-sm'>
@@ -341,6 +496,7 @@ function VendorHero ({studio}) {
                         </div>
                       )}
                     </div>
+                  </div>
                   </div>
                   <button
                     type='submit'
