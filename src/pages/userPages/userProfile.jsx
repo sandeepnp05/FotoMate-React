@@ -31,7 +31,7 @@ function UserProfile () {
       setImg(reader.result)
     }
   }
-  useEffect(() => {})
+  
   const handleImageUpdate = async () => {
     try {
       if (img) {

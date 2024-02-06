@@ -16,6 +16,8 @@ import NotFound from '../components/userComponents/NotFound'
 import UserProtect from './userPrivate/UserProtect'
 import Cancel from '../pages/userPages/Cancel'
 import Success from '../pages/userPages/Success'
+import Checkout from '../pages/userPages/Checkout'
+import Chat from '../pages/userPages/Chat'
 
 function UserRoute() {
   return (
@@ -32,8 +34,10 @@ function UserRoute() {
         <Route path='/studio/:id'element={<UserProtect><SingleStudio/></UserProtect>}/>
         <Route path='/studios'element={<Studios/>}/>
         <Route path='/booking'element={<Booking/>}/>
+        <Route path='/checkout'element={<Checkout/>}/>
         <Route path='/success'element={<Success/>}/>
         <Route path='/cancel'element={<Cancel/>}/>
+        <Route path='/chat/:id' element= {<Chat/>}/>
         <Route path='/*'element={<NotFound/>}/>
 
 

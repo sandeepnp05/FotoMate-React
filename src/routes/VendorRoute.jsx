@@ -11,6 +11,7 @@ import VendorPublic from './vendorPrivate/VendorPublic';
 import VendorProtect from './vendorPrivate/VendorProtect';
 import Bookings from '../pages/vendorPages/Bookings';
 import NotFound from '../components/vendorComponents/vendorCommon/NotFound';
+import VendorChat from '../pages/vendorPages/VendorChat';
 function VendorRoute() {
   return (
     <Routes>
@@ -21,6 +22,7 @@ function VendorRoute() {
       <Route path='/createStudio' element={<VendorProtect><CreateStudio/></VendorProtect>} />
       <Route path='/studio/:vendorId' element={<VendorProtect><VendorStudio/></VendorProtect>}/>
       <Route path='/bookings/:vendorId' element={<VendorProtect><Bookings/></VendorProtect>}/>
+      <Route path='/chat/:id'element={<VendorProtect><VendorChat/></VendorProtect>}/>
       <Route path='/*'element={<VendorPublic><NotFound/></VendorPublic>}/>
     </Routes>
   );

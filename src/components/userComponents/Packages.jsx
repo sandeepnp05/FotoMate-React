@@ -20,8 +20,9 @@ function Packages ({ packages, cities }) {
     const modal = new Modal(document.getElementById('bookingModal'))
     modal.show()
   }
-  console.log(cities, 'cities')
+  console.log(selectedPackageId,'selpackId 1')
   const onSubmit = async () => {
+    console.log('clicked')
     try {
       const res = await bookingPackage({
         ...values,
@@ -29,15 +30,16 @@ function Packages ({ packages, cities }) {
         userId: _id
       })
       if (res.status === 200) {
-        toast.success('Booking completed successfully')
-        navigate('/booking')
+        const responseData = res.data;
+        // toast.success('Booking completed successfully')
+        navigate(`/checkout`,{
+          state: { responseData ,...values}
+        })
       }
     } catch (error) {
       console.log(error.message)
     }
   }
-
-
 
   const { handleChange, handleBlur, handleSubmit, errors, values, touched } =
     useFormik({
@@ -47,12 +49,13 @@ function Packages ({ packages, cities }) {
         selectedPlace: []
       },
       validationSchema: Yup.object({
-        date: Yup.date().required('Please select a date').min(new Date(), 'Date must be in the future'),
+        date: Yup.date()
+          .required('Please select a date')
+          .min(new Date(), 'Date must be in the future'),
         place: Yup.string().required('Please select a place')
       }),
       onSubmit
     })
-
   return (
     <>
       <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3  sm:gap-4 sm:px-6 mb-6  px-8 md:px-10 lg:px-12'>
@@ -95,8 +98,11 @@ function Packages ({ packages, cities }) {
                 ))}
               </ul>
               <p className='w-full border-b-2 border-neutral-100 border-opacity-100 px-6 py-3 dark:border-opacity-50'>{`Total amount :  ₹${totalPrice}`}</p>
-              <p className='w-full border-b-2 border-neutral-100 border-opacity-100 px-6 py-3 dark:border-opacity-50'>
-                Advance 20% : ₹{totalPrice * 0.2}
+              {/* <p className='w-full border-b-2 border-neutral-100 border-opacity-100 px-6 py-3 dark:border-opacity-50'>
+                Advance : ₹{totalPrice * 0.2}
+              </p> */}
+              <p className='px-6 text-xs py-3'>
+                Pay 20% for advance and book the date
               </p>
               {/* modal ///////////////////////////////////////////////// */}
               <div
@@ -167,7 +173,6 @@ function Packages ({ packages, cities }) {
                             min={new Date().toISOString().split('T')[0]}
                           />
 
-                        
                           <label
                             htmlFor='place'
                             className='block mt-3 text-sm font-medium text-gray-900 dark:text-white'
@@ -191,6 +196,22 @@ function Packages ({ packages, cities }) {
                               </option>
                             ))}
                           </select>
+                          <label
+                            htmlFor='place'
+                            className='block mt-3 text-sm font-medium text-gray-900 dark:text-white'
+                          >
+                            Advance amount
+                          </label>
+                          <input
+                            type='text'
+                            id='disabled-input-2'
+                            aria-label='disabled input 2'
+                            className='bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500'
+                            value={`₹ ${totalPrice*.2}`}
+                            disabled
+                            readOnly
+                            
+                          ></input>
                           <button
                             type='submit'
                             className='mt-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full'

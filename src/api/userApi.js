@@ -122,8 +122,13 @@ export const getBooking = async (userId) =>{
   const data  = await userAxiosInstance.get(`/getBooking?userId=${userId}`)
   return data;
 }
+export const getCheckoutPackage = async(checkoutData) =>{
+  const data = await userAxiosInstance.get(`/getCheckoutPackage?packageId=${checkoutData}`)
+  return data;
+}
 
 export const paymentCheckout = async (body) =>{
   const data = await userAxiosInstance.post(`create-checkout-session`,body)
   return data;
 }
+

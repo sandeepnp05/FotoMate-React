@@ -24,14 +24,16 @@ function Success() {
           </p>
           <p>Have a great day!</p>
           <div className="py-4">
-            <p className="text-gray-600 my-2">Rate the studio:</p>
+            <p className="text-gray-600 my-2">  </p>
             {/* <div>{stars}</div> */}
+            <Link to={'/booking'}>
             <button
             //   onClick={handleRatingSubmit}
               className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold mt-2"
             >
-              Submit Rating
+             view bookings
             </button>
+            </Link>
           </div>
           <div className="py-6 text-center">
             <Link
