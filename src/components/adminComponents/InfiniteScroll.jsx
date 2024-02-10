@@ -25,7 +25,7 @@ function InfiniteScroll() {
     className="absolute top-1/2 left-1/2 max-w-none -translate-x-1/2 -translate-y-1/2"
     width={1308}
   />
-  <div className="absolute inset-0 bg-[url(/img/grid.svg)] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
+  <div className="absolute inset-0  bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
   <div className="pointer-events-none relative flex gap-10 overflow-hidden">
     <div className="animate-marquee flex min-w-full shrink-0 items-center justify-around gap-10">
       <img
