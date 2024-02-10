@@ -1,6 +1,6 @@
 import React from 'react'
 import {Route,Routes} from 'react-router-dom'
-import AdminLogin from '../pages/adminPages/adminLogin'
+import AdminLogin from '../pages/adminPages/AdminLogin'
 import AdminDashBoard from '../pages/adminPages/AdminDashBoard'
 import VendorList from '../pages/vendorPages/VendorList'
 import StudioList from '../pages/adminPages/StudioList'
