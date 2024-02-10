@@ -1,7 +1,7 @@
 import React from 'react'
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { getBooking, paymentCheckout } from '../../api/userApi'
+import { getBooking,cancelBookings } from '../../api/userApi'
 import { useQuery } from '@tanstack/react-query'
 import { UserNavbar } from './UserNavbar'
 import { loadStripe } from '@stripe/stripe-js'
@@ -12,6 +12,18 @@ import UserFooter from '../../components/userComponents/UserFooter'
 
 function Booking () {
   const { user } = useSelector(state => state.userReducer)
+  const [reason, setReason] = useState('')
+  const [bookingId, setBookingId] = useState('')
+
+  const handleSubmit = async e => {
+    e.preventDefault()
+    console.log('Reason:', reason)
+    const { data } = await cancelBookings(reason, bookingId)
+    console.log(data, 'cancel data')
+    const myModal = document.getElementById('my_modal_1')
+    setReason('')
+    myModal.close()
+  }
   useEffect(() => {
     initFlowbite()
   }, [])
@@ -66,9 +78,15 @@ function Booking () {
                   Advance amount
                 </th>
                 <th scope='col' className='px-6 py-3'>
+                  Stauts
+                </th>
+                <th scope='col' className='px-6 py-3'>
                   Payment
                 </th>
                 <th scope='col' className='px-6 py-3'>
+                
+                </th>
+              <th scope='col' className='px-6 py-3'> 
                   <span className='sr-only'>Edit</span>
                 </th>
               </tr>
@@ -76,7 +94,7 @@ function Booking () {
            
                 <tbody>
                   {data &&
-                    data.data.map((bookingData, index) => (
+                    data.data.bookingData.map((bookingData, index) => (
                       <tr
                         key={index}
                         className='group relative bg-white border-b dark:bg-gray-800 dark:border-gray-700'
@@ -85,9 +103,9 @@ function Booking () {
                           scope='row'
                           className='px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white'
                         >
-                          {bookingData.packageId.name}
+                          {bookingData?.packageId?.name}
                         </th>
-                        <td className='px-6 py-4'>{bookingData.location}</td>
+                        <td className='px-6 py-4'>{bookingData?.location}</td>
                         <td className='px-6 py-4'>
                           {new Date(bookingData.eventDate).toLocaleDateString()}
                         </td>
@@ -95,7 +113,56 @@ function Booking () {
                         <td className='px-6 py-4'>
                           {bookingData.advanceAmount}
                         </td>
-                        <td className='px-6 py-4'>Advance paid</td>
+                        <td
+                    className={`px-6 py-4 ${
+                      bookingData.workStatus === 'cancelled'
+                        ? 'text-red-500'
+                        : 'text-yellow-500'
+                    }`}
+                  >
+                    {bookingData.workStatus}
+                  </td>
+                        <td className='px-6 py-4'>{`${bookingData.workStatus==='cancelled'?'Advance refunded':'Advance paid'}`}</td>
+                        <td className='px-6 py-4 text-right'>
+                    <button
+                      className='btn-link opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-danger dark:text-blue-500 hover:underline mx-2'
+                      onClick={() => {
+                        setBookingId(bookingData._id)
+                        document.getElementById('my_modal_1').showModal()
+                      }}
+                    >
+                      cancel booking
+                    </button>
+
+                    {/* className='opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-danger dark:text-blue-500 hover:underline mx-2' */}
+                    <dialog id='my_modal_1' className='modal'>
+                      <div className='modal-box rounded-sm'>
+                        <h3 className='font-bold text-xl'>
+                          Reason for cancellation!
+                        </h3>
+                        <form onSubmit={handleSubmit}>
+                          <textarea
+                            className='w-full h-full rounded-sm'
+                            onChange={e => setReason(e.target.value)}
+                          />
+                          <div className='modal-action'>
+                            <button
+                              type='submit'
+                              className='btn btn-success btn-sm text-white'
+                            >
+                              Submit and cancel
+                            </button>
+                            <button
+                              type='button'
+                              className='btn btn-danger btn-sm text-blak'
+                            >
+                              Close
+                            </button>
+                          </div>
+                        </form>
+                      </div>
+                    </dialog>
+                  </td>
                         <td>
                           <Tooltip text={'chat with vendor'}>
                             <Link to={`/chat/${bookingData.vendorId}`}>

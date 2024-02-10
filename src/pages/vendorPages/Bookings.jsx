@@ -7,7 +7,7 @@ import ErrorBoundary from '../../components/common/ErrorBoundary'
 import { fetchBooking } from '../../api/vendorApi'
 import Tooltip from '../../components/common/Tooltip'
 
-function Booking () {
+function Bookings () {
   const { vendorId } = useParams()
 
   const { data, isError, isLoading } = useQuery({
@@ -15,8 +15,6 @@ function Booking () {
     queryFn: async () => await fetchBooking(vendorId)
   })
 
-  console.log(vendorId, 'vendorId')
-  console.log(data, 'ddataa')
   if (isLoading) {
     return <div>Loading...</div>
   }
@@ -24,8 +22,8 @@ function Booking () {
   if (isError) {
     return <div>Error occurred while fetching user details</div>
   }
+  console.log(data,'userData')
   return (
-    <ErrorBoundary>
       <>
         <VendorNavbar />
         <>
@@ -56,32 +54,44 @@ function Booking () {
                     Advance amount
                   </th>
                   <th scope='col' className='px-6 py-3'>
-                    <span className='sr-only'>Edit</span>
+                    Status
+                  </th>
+                  <th scope='col' className='px-6 py-3'>
+                   
                   </th>
                 </tr>
               </thead>
               {data &&
-                data.data.bookingData.map((bookingData, index) => (
+                data?.data?.bookingData?.map((bookingData, index) => (
                   <tbody key={index}>
                     <tr className='group bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
                       <th
                         scope='row'
                         className='px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white'
                       >
-                        {bookingData.packageId.name}
+                        {bookingData?.packageId?.name}
                       </th>
-                      <td className='px-6 py-4'>{bookingData.userId.name}</td>
-                      <td className='px-6 py-4'>{bookingData.userId.email}</td>
-                      <td className='px-6 py-4'>{bookingData.location}</td>
+                      <td className='px-6 py-4'>{bookingData?.userId?.name}</td>
+                      <td className='px-6 py-4'>{bookingData?.userId?.email}</td>
+                      <td className='px-6 py-4'>{bookingData?.location}</td>
                       <td className='px-6 py-4'>
-                        {new Date(bookingData.eventDate).toLocaleDateString()}
+                        {new Date(bookingData?.eventDate).toLocaleDateString()}
                       </td>
-                      <td className='px-6 py-4'>{bookingData.totalAmount}</td>
-                      <td className='px-6 py-4'>{bookingData.advanceAmount}</td>
+                      <td className='px-6 py-4'>{bookingData?.totalAmount}</td>
+                      <td className='px-6 py-4'>{bookingData?.advanceAmount}</td>
+                      <td
+                    className={`px-6 py-4 ${
+                      bookingData.workStatus === 'cancelled'
+                        ? 'text-red-500'
+                        : 'text-yellow-500'
+                    }`}
+                  >
+                    {bookingData.workStatus}
+                  </td>
                       <td className='px-6 py-4 text-right '>
              
                         <Tooltip text={'chat with user'}>
-                          <Link to={`/vendor/chat/${bookingData.userId._id}`}>
+                          <Link to={`/vendor/chat/${bookingData?.userId?._id}`}>
                             <button className='z-20 text-white flex flex-col  shrink-0 grow-0 justify-around mr-1 mb-1 lg:mr-1 lg:mb-1 xl:mr-1 xl:mb-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300'>
                               <div className='p-2 rounded-full border-4 border-white bg-green-600'>
                                 <svg
@@ -108,8 +118,7 @@ function Booking () {
           </div>
         </>
       </>
-    </ErrorBoundary>
   )
 }
 
-export default Booking
+export default Bookings

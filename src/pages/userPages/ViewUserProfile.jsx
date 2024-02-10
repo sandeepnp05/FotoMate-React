@@ -29,13 +29,13 @@ const ViewUserProfile = () => {
       if (isError) {
           return <div>Error occurred while fetching user details</div>;
       }
+      console.log(data,'user')
   return (
     <>
       <UserNavbar />
-      <div className='flex flex-col md:flex-row w-full mx-auto mt-10 md:mt-36 items-center justify-center flex-wrap'>
+      <div className="flex justify-center items-center h-screen">
         {/* left div */}
-        <div className='w-full md:w-1/2 mt-24 md:mt-0 flex-grow mb-4 md:mb-0 p-4 md:p-20'>
-        <div className="w-full max-w-md bg-white border border-gray-300 dark:bg-gray-800 dark:border-gray-700  p-4">
+        <div className="w-full max-w-md justify-center items-center bg-white border border-gray-300 dark:bg-gray-800 dark:border-gray-700  p-4">
           <div className="flex justify-end">
             <button
               id="dropdownButton"
@@ -75,7 +75,7 @@ const ViewUserProfile = () => {
           <div className="flex flex-col items-center pb-4">
             <img
               className='h-20 w-20 md:h-24 md:w-24 bg-blue-500 rounded-full overflow-hidden border mb-2 md:mb-0 md:mr-4'
-              src={user.profileImage}
+              src={data&& data?.data?.user?.profileImage}
               alt="Profile Image"
             />
             <h5 className="mb-1 text-2xl md:text-xl font-semibold text-gray-900 dark:text-white">
@@ -85,7 +85,7 @@ const ViewUserProfile = () => {
               {user.email}
             </span>
             <span className="text-lg text-gray-600 dark:text-gray-400">
-              Wallet Balance: {user.wallet}
+              Wallet Balance: {` ₹ ${data&& data?.data?.user?.wallet}`}
             </span>
             <Link to={'/booking'}>
             <span className="text-lg text-primary dark:text-gray-400">
@@ -95,16 +95,16 @@ const ViewUserProfile = () => {
 
           </div>
         </div>
+        </div>
 
 
         
-      </div>
        {/* rightdiv */}
        
      
 
-{/* 
-       <div className='w-full md:w-1/2 flex-grow flex items-center justify-center'>
+
+       {/* <div className='w-full md:w-1/2 flex-grow flex items-center justify-center'>
        <div className='flex flex-col items-center justify-center pl-0 md:pr-36'>
            <h5>You haven't booked studio yet</h5>
 
@@ -117,7 +117,6 @@ const ViewUserProfile = () => {
             />
             </div>
         </div> */}
-      </div>
     </>
   );
 };

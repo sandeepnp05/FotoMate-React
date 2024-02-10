@@ -10,6 +10,7 @@ import { useQuery } from '@tanstack/react-query'
 
 
 
+
 function UserHome () {
   const [catFilter, setCatFilter] = useState([])
   const [searchTerm, setSearchTerm] = useState('');
@@ -26,7 +27,10 @@ function UserHome () {
     };
   }, [searchTerm]);
 
-
+  useEffect(() => {
+    initFlowbite();
+  }, []);
+  
   const {
     data: category,
     isLoading,

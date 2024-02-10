@@ -132,3 +132,7 @@ export const paymentCheckout = async (body) =>{
   return data;
 }
 
+export const cancelBookings = async (reason, bookingId) => {
+  const data = await userAxiosInstance.post('/cancelBooking', { reason, bookingId })
+  return data;
+};

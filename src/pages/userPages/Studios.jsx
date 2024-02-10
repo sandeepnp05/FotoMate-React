@@ -13,6 +13,10 @@ function Studios() {
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All categories');
 
+  useEffect(() => {
+    initFlowbite();
+  }, []);
+
 
   useEffect(() => {
     const timerId = setTimeout(() => {

@@ -1,10 +1,11 @@
-import React, { useRef } from 'react'
-import { useParams } from 'react-router-dom'
+
+import React, { useCallback, useRef } from 'react'
+import { Navigate, useParams } from 'react-router-dom'
 import { useEffect } from 'react'
 import { io } from 'socket.io-client'
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { getChats, getUser, getVendor } from '../../api/chatApi'
+import { getChatList, getChats, getUser, getVendor } from '../../api/chatApi'
 import { useSelector } from 'react-redux'
 import { sendMessageApi } from '../../api/messageApi'
 import VendorNavbar from '../../components/vendorComponents/vendorCommon/VendorNavbar'
@@ -15,45 +16,51 @@ var socket, selectedChatCompare
 function vendorChat () {
   const [socketConnected, setSocketConnected] = useState(false)
   const [newMessage, setNewMessage] = useState('')
-  const [messages,setMessages] = useState('');
+  const [messages, setMessages] = useState('')
   const [chat, setAllChats] = useState([])
-  const { id } = useParams()
+  const [selectedUser,setSelectedUser] = useState()
+  
+  const [id, setId] = useState('');
+
+  const { id: userId } = useParams();
+  useEffect(() => {
+    setId(userId);
+  }, [id,userId]);
+          
+ 
   const { vendor } = useSelector(state => state.vendorReducer)
+ 
   const vendorId = vendor._id
-  console.log(vendorId, 'vendorId')
   const scroll = useRef()
 
   useEffect(() => {
     if (scroll.current) {
-      scroll.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      scroll.current.scrollIntoView({ behavior: 'smooth', block: 'end' })
     }
-  }, [chat]);
+  }, [chat])
 
   useEffect(() => {
-    socket = io(ENDPOINT);
-  
+    socket = io(ENDPOINT)
+
     socket.on('connect', () => {
-      setSocketConnected(true);
-      socket.emit('setup', vendorId);
-      console.log('Connected to socket.io');
-    });
-  
+      setSocketConnected(true)
+      socket.emit('setup', vendorId)
+      console.log('Connected to socket.io')
+    })
+
     socket.on('disconnect', () => {
-      setSocketConnected(false);
-      console.log('Disconnected from socket.io');
-    });
-  
-    socket.on('receive_message', (newMessage) => {
-      console.log('Received message:', newMessage);
-      setAllChats((prevChats) => [...prevChats, newMessage]);
-    });
-  
+      setSocketConnected(false)
+      console.log('Disconnected from socket.io')
+    })
+
+    socket.on('receive_message', newMessage => {
+      setAllChats(prevChats => [...prevChats, newMessage])
+    })
+
     return () => {
-      socket.disconnect();
-    };
-  }, []);
-  
-  
+      socket.disconnect()
+    }
+  }, [])
 
   const sendMessage = async e => {
     e.preventDefault()
@@ -70,46 +77,54 @@ function vendorChat () {
       newMessage
     }
     try {
-        const { data } = await sendMessageApi(messsage)
-        newOne = data?.savedMessage
-        console.log(newOne,'newOne')
-        socket.emit('send-message',newOne)
-        setAllChats((prevChats)=>[...prevChats,newOne])
-        setNewMessage('')
+      const { data } = await sendMessageApi(messsage)
+      newOne = data?.savedMessage
+      socket.emit('send-message', newOne)
+      setAllChats(prevChats => [...prevChats, newOne])
+      setNewMessage('')
     } catch (error) {
       console.log(error.message)
     }
   }
 
-
-  const handleChange = (e) => {
+  const handleChange = e => {
     setNewMessage(e.target.value)
   }
 
-  const handleKeyPress = (e) => {
+  const handleKeyPress = e => {
     if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage(e);
+      e.preventDefault()
+      sendMessage(e)
     }
-  };
-  
+  }
+
+ 
 
   const { error: userError, data: userData } = useQuery({
     queryKey: ['user'],
-    queryFn: () => getUser(id)
+    queryFn: () => getUser(userId)
   })
+   console.log(userData,'userData1')
+   console.log(id,'id')
 
   const { error: studioError, data: studioData } = useQuery({
     queryKey: ['studio'],
     queryFn: () => getVendor(vendorId)
   })
 
+  const { error: chatListError, data: chatList } = useQuery({
+    queryKey: ['chatList'],
+    queryFn: () => getChatList(vendorId)
+  })
+
+
+
   useEffect(() => {
     const getAllChats = async () => {
       try {
         if (id && vendorId) {
           const { data } = await getChats(id, vendorId)
-          setAllChats(data.messages || []);
+          setAllChats(data.messages || [])
         } else {
           console.log('id or vendorId is undefined')
         }
@@ -120,34 +135,93 @@ function vendorChat () {
     getAllChats()
   }, [id, vendorId])
 
-console.log(chat,'chat')
 
+
+
+  // chat list 
+
+  const loadChatWithUser = useCallback(async (id) => {
+    try {
+      const { data } = await getChats(id, vendorId);
+      setAllChats(data.messages || []);
+      const fetchUserData = async () => {
+        try {
+          const { data: user } = await getUser(id);
+          setSelectedUser(user);
+        } catch (error) {
+          console.log(error.message);
+        }
+      };
+      fetchUserData();
+    } catch (error) {  
+      console.log(error.message);
+    }
+  }, [vendorId, id]);
   
+
+  // Handler to select a user and load chat history
+  const selectUser = useCallback((id) => {
+    setId(id);
+    loadChatWithUser(id);
+  }, [setId, loadChatWithUser]);
+
+        
+  useEffect(()=>{       
+    setSelectedUser(userData?.data)
+  },[id])
+ console.log(selectedUser &&selectedUser,'selectedUser')
+ console.log(userData&&userData?.data,'userData')
   return (
     <>
-      <VendorNavbar />
+      <VendorNavbar /> 
       <div className='flex flex-row overflow-auto'>
         {/* section 1 */}
-        <div className=' fixed h-screen w-0 md:w-1/4  md:block lg:w-1/4 bg-[#000000] bg-[radial-gradient(#ffffff33_1px,#00091d_1px)] bg-[background-size:20px_20px]'
-         >
+        <div className=' fixed h-screen w-0 md:w-1/4  md:block lg:w-1/4 bg-[#000000] bg-[radial-gradient(#ffffff33_1px,#00091d_1px)] bg-[background-size:20px_20px]'>
           <div className='mt-20 flex justify-center'>
             <img
-              src={studioData?.data?.coverImage||'https://tecdn.b-cdn.net/img/new/avatars/2.webp'}
+              src={
+               selectedUser && selectedUser?.[0]?.profileImage ||
+                'https://tecdn.b-cdn.net/img/new/avatars/2.webp'
+              }
               className='w-32 h-32 rounded-full'
               alt='Avatar'
             />
           </div>
-          <h1 className='text-center text-white'>{studioData?.data?.studioName}</h1>
+          <h1 className='text-center text-white'>
+            {selectedUser && selectedUser?.[0]?.name}
+          </h1>
+          <div>
+            <h1 className='mb-4   text-white pl-5 mt-12'>Chat list</h1>
+
+            {chatList && chatList?.data?.map((user,index )=> (
+              
+              <div key={index} className=' pl-5 py-1 flex flex-row cursor-pointer' onClick={() => selectUser(user.user._id)}>
+                <img
+                  className='w-8 h-8 rounded-full'
+                  alt='Tailwind CSS chat bubble component'
+                  src={ user?.user?.profileImage
+                    ||'https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg'
+                  }
+                />{' '}
+                <h3 className='text-white text-sm pt-2 pl-3 justify-center text-justify'>
+                  {user?.user?.name}
+                </h3>
+              </div>
+              
+            ))}
+
+
+          </div>
         </div>
 
         {/* section 2 */}
-        <div>
-            
-        </div>
-        <div className=' md:pl-72 pb-24 w-full md:w-full    bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] 'ref={scroll}>
+        <div></div>
+        <div
+          className=' md:pl-72 pb-24 w-full md:w-full    bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] '
+          ref={scroll}
+        >
           {/* User chats  */}
-          <div className='w-full md:w-full md:p-6  bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]'
-          >
+          <div className='w-full md:w-full md:p-6  bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]'>
             {chat &&
               chat?.map((message, index) => {
                 const isUserMessage = message?.receiver?.role === 'User'
@@ -165,19 +239,23 @@ console.log(chat,'chat')
                           alt='Tailwind CSS chat bubble component'
                           src={
                             isUserMessage
-                              ? studioData?.data?.coverImage||''
-                              : (userData?.data?.[0]?.profileImage || 'https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg')
+                              ? studioData?.data?.coverImage || ''
+                              : selectedUser?.[0]?.profileImage ||
+                                'https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg'
                           }
                         />
                       </div>
                     </div>
-                    <div className='chat-header'>
-                      {isUserMessage ? studioData?.data?.studioName : userData?.data?.[0]?.name}
-                    </div>
-                      <time  className='text-xs opacity-70 pl-2'>
-                       { new Date(message?.createdAt).toLocaleTimeString()}
-                      </time>
                     <div className='chat-bubble'>{message.content}</div>
+                    <time className='text-xs opacity-70 pl-2'>
+                      {new Date(message?.createdAt).toLocaleTimeString()}
+                    </time>
+                    <div className='chat-header'>
+                      {isUserMessage
+                        && studioData?.data?.studioName
+                        // : userData?.data?.[0]?.name
+                        }
+                    </div>
                     {/* <div className='chat-footer opacity-50'>
                       {isUserMessage
                         ? 'Delivered'
@@ -187,7 +265,6 @@ console.log(chat,'chat')
                 )
               })}
           </div>
-          
 
           <div className='border-t-2 w-full md:w-3/4  fixed bottom-6 border-gray-200 px-4 pt-4 mb-2 sm:mb-0'>
             <div className='relative flex'>
@@ -223,5 +300,4 @@ console.log(chat,'chat')
     </>
   )
 }
-
-export default vendorChat
+export default vendorChat;

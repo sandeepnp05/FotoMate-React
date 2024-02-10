@@ -55,6 +55,8 @@ function UserLogin() {
     }
   }
 
+
+  const isFullWidth = window.innerWidth === window.screen.width;
   return (
     <>
       <div

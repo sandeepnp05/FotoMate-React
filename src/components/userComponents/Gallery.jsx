@@ -9,8 +9,8 @@ function Gallery ({ catId }) {
 
   const fetchStudios = async ({ pageParam = 1 }) => {
     const res = await studioList(catId, pageParam);
-    console.log('Fetched studios:', res.data.studios); // Log fetched studios
-    return res.data; // Return the entire data object
+    console.log('Fetched studios:', res.data.studios); 
+    return res.data;
   };
   
 
@@ -35,7 +35,7 @@ function Gallery ({ catId }) {
           fetchNextPage();
         }
       },
-      { threshold: 1 }
+      { threshold: .1 }
     );
   
     const el = loadMoreButtonRef.current;

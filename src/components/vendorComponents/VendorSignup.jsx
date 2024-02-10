@@ -41,8 +41,8 @@ function VendorSignup () {
         onSubmit,
   })
   return (
-    <div className='flex items-center justify-center min-h-screen bg-gray-400'>
-    <div className='flex items-center justify-center min-h-screen bg-gradient-to-r from-navy to-blue-400'>
+    <div className='flex items-center justify-center min-h-screen bg-gray-900'>
+  <div className='flex items-center justify-center absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px]'>
       <div className='flex w-full max-w-xl bg-white rounded-lg shadow-lg overflow-hidden'>
         
         <img

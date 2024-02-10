@@ -47,7 +47,7 @@ function UserProfile () {
 
   useEffect(() => {
     handleImageUpdate()
-  }, [img])
+  }, [img]) 
 
   useEffect(() => {
     setRender(false)

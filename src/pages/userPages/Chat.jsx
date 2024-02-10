@@ -126,21 +126,21 @@ console.log(userData,'userData')
         <div className=' fixed h-screen mt-24 w-0 md:w-1/4 md:block lg:w-1/4 bg-[#000000] bg-[radial-gradient(#ffffff33_1px,#00091d_1px)] bg-[background-size:20px_20px]'>
           <div className='mt-20 flex justify-center'>
             <img
-              src={'https://tecdn.b-cdn.net/img/new/avatars/2.webp'}
-              className='w-32 rounded-full'
+              src={(studioData?.data?.coverImage)||'https://tecdn.b-cdn.net/img/new/avatars/2.webp'}
+              className='w-32 h-32 rounded-full'
               alt='Avatar'
             />
           </div>
-          <h1 className='text-center text-white'>Sandeep</h1>
+          <h1 className='text-center text-white'> {studioData?.data?.studioName}</h1>
         </div>
 
         {/* section 2 */}
         <div>
             
         </div>
-        <div className=' md:pl-72 pb-24 w-full md:w-full    bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] 'ref={scroll}>
+        <div className=' md:ml-72 md:pl-8 pb-24 w-full md:w-full    bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] 'ref={scroll}>
           {/* User chats  */}
-          <div className= 'pt-16 md:p-16 w-full md:w-full  bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]'>
+          <div className= 'pt-16 md:pt-16 w-full md:w-full   bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]'>
             {chat &&
               chat?.map((message, index) => {
                 const isUserMessage = message?.receiver?.role === 'User'
@@ -165,13 +165,13 @@ console.log(userData,'userData')
                         />
                       </div>
                     </div>
-                    <div className='chat-header'>
-                      {isUserMessage ? studioData?.data?.studioName : userData?.data?.[0]?.name}
-                    </div>
+                    <div className='chat-bubble'>{message.content}</div>
                     <time className='text-xs opacity-50'>
                     { new Date(message?.createdAt).toLocaleTimeString()}
                     </time>
-                    <div className='chat-bubble'>{message.content}</div>
+                    <div className='chat-header'>
+                      {isUserMessage ? studioData?.data?.studioName : userData?.data?.[0]?.name}
+                    </div>
                     {/* <div className='chat-footer opacity-50'>
                       {isUserMessage
                         ? 'Delivered'
@@ -183,7 +183,7 @@ console.log(userData,'userData')
           </div>
           
 
-          <div className='border-t-2 w-full md:w-3/4  fixed bottom-6 border-gray-200 px-4 pt-4 mb-2 sm:mb-0'>
+          <div className='border-t-2 w-full md:w-3/4  fixed bottom-6 border-gray-200 pt-4 mb-2 sm:mb-0'>
             <div className='relative flex'>
               <input
                 value={newMessage}
