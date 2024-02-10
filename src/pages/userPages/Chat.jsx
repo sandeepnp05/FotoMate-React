@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux'
 import { sendMessageApi } from '../../api/messageApi'
 import { UserNavbar } from './UserNavbar'
 
-const ENDPOINT = 'http://localhost:3001'
+const ENDPOINT = 'http://localhost:3000'
 var socket, selectedChatCompare
 
 function Chat () {

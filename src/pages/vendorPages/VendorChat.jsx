@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux'
 import { sendMessageApi } from '../../api/messageApi'
 import VendorNavbar from '../../components/vendorComponents/vendorCommon/VendorNavbar'
 
-const ENDPOINT = 'http://localhost:3001'
+const ENDPOINT = 'http://localhost:3000'
 var socket, selectedChatCompare
 
 function vendorChat () {
