@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux'
 import { sendMessageApi } from '../../api/messageApi'
 import { UserNavbar } from './UserNavbar'
 
-const ENDPOINT = 'https://fotomate.vercel.app'
+const ENDPOINT = 'https://fotomate.swoz.shop'
 var socket, selectedChatCompare
 
 function Chat () {
