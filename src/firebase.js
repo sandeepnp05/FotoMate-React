@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: "fotomate.vercel.app",
+  authDomain: "fotomate-photography.firebaseapp.com",
   projectId: "fotomate-photography",
   storageBucket: "fotomate-photography.appspot.com",
   messagingSenderId: "846534752428",
