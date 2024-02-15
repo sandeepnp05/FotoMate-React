@@ -26,7 +26,6 @@ function Oauth() {
 
       if (res?.status == 200) {
         const { user, token } = res.data
-       console.log(res.data,'res data')
         localStorage.setItem('userToken', token)
         dispatch(
           userLogin({

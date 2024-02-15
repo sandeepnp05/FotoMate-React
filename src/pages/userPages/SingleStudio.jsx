@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState,useCallback } from 'react'
 import { UserNavbar } from './UserNavbar'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { fetchStudioPackages, singleStudioDetails } from '../../api/userApi'
 import { Carousel, initTE, Ripple } from 'tw-elements'
 import Loading from '../../components/common/Loading'
@@ -10,15 +10,12 @@ import UserFooter from '../../components/userComponents/UserFooter'
 import { getCategories } from '../../api/userApi'
 import { useQuery } from '@tanstack/react-query'
 import Packages from '../../components/userComponents/Packages'
+import UserReviews from '../../components/userComponents/UserReviews'
+import { StarRating } from '../../components/userComponents/StarRating'
 initTE({ Carousel, Ripple })
 function SingleStudio () {
-  // const [studio, setStudio] = useState(null)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(false)
   const { id } = useParams()
   const [isDesktop, setIsDesktop] = useState(window.innerWidth > 768)
-  // const [categories, setCategory] = useState([])
-  // const [cities,setCities] = useState([])
 
   const updateWindowSize = () => {
     setIsDesktop(window.innerWidth > 768)
@@ -40,8 +37,6 @@ function SingleStudio () {
     queryKey:['package',id],queryFn: () => fetchStudioPackages(id)
   })
     const packages = packageData?.data || []
-    console.log(packages,'packages')
-    console.log(id,'iddddd')
   
   useEffect(() => {
     window.addEventListener('resize', updateWindowSize)
@@ -49,6 +44,8 @@ function SingleStudio () {
       window.removeEventListener('resize', updateWindowSize)
     }
   }, [])
+
+
 
  
 
@@ -60,10 +57,10 @@ function SingleStudio () {
     )
   }
 
-  if (error) {
+  if (isError) {
     return (
       <div className='flex items-center justify-center h-screen'>
-        <p>{error}</p>
+        <p>{isError}</p>
       </div>
     )
   }
@@ -102,13 +99,7 @@ function SingleStudio () {
                             {studio && studio.studioName}
                           </h5>
 
-                          <div className='rating mb-6'>
-                            <div className='mask mask-star-2 bg-orange-400 w-4 h-4'></div>
-                            <div className='mask mask-star-2 bg-orange-400 w-4 h-4'></div>
-                            <div className='mask mask-star-2 bg-orange-400 w-4 h-4'></div>
-                            <div className='mask mask-star-2 bg-orange-400 w-4 h-4'></div>
-                            <div className='mask mask-star-2 bg-orange-400 w-4 h-4'></div>
-                          </div>
+                          <StarRating totalRating={studio && studio.totalRating} />
 
                           <h5 className='mb-4 text-xl font-medium leading-tight text-neutral-800 dark:text-neutral-50'>
                             {' '}
@@ -128,13 +119,15 @@ function SingleStudio () {
                             Total Rs:
                           </h5>
                           <p className='mb-4 text-base text-neutral-600 dark:text-neutral-200'></p>
+                          <Link to={'/booking'}>
                           <button
                             type='button'
-                            className='mb-2 block w-full rounded border-2 border-danger px-6 pb-[6px] pt-2 text-xs font-medium uppercase leading-normal text-danger transition duration-150 ease-in-out hover:border-primary-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-primary-600 focus:border-primary-600 focus:text-primary-600 focus:outline-none focus:ring-0 active:border-danger-700 active:text-danger-700 dark:hover:bg-neutral-100 dark:hover:bg-opacity-10'
+                            className='mb-2 block w-full rounded border-2 border-success px-6 pb-[6px] pt-2 text-xs font-medium uppercase leading-normal text-success transition duration-150 ease-in-out hover:border-primary-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-primary-600 focus:border-primary-600 focus:text-primary-600 focus:outline-none focus:ring-0 active:border-danger-700 active:text-danger-700 dark:hover:bg-neutral-100 dark:hover:bg-opacity-10'
                             data-te-ripple-init
-                          >
-                            Request reply
+                            >
+                            View bookings
                           </button>
+                            </Link>
                         </div>
                       </div>
                     </div>
@@ -165,18 +158,22 @@ function SingleStudio () {
                   Packages
                 </h5>
             <Packages packages={packages} cities={cities}/>
+           
+            <div className='justify-items-center'>
+        <UserReviews studio={studio}/>
+      </div>
           
           <UserFooter />
         </>
       )}
 
-      {loading && (
+      {isLoading && (
         <div className='flex items-center justify-center h-screen'>
           <Loading />
         </div>
       )}
 
-      {error && <p>Error fetching studio information</p>}
+      {isLoading && <p>Error fetching studio information</p>}
     </>
   )
 }

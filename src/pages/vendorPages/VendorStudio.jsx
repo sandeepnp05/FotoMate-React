@@ -5,7 +5,6 @@ import {
   addPackage,
   editStudio,
   fetchPackages,
-  
   showVendorStudio,
   updateCoverImage
 } from '../../api/vendorApi'
@@ -18,8 +17,9 @@ import { Modal, Ripple, initTE } from 'tw-elements'
 import Multiselect from 'multiselect-react-dropdown'
 import { useFormik } from 'formik'
 import { useQuery } from '@tanstack/react-query'
-import { Navigate, useNavigate,Link } from 'react-router-dom'
+import { Navigate, useNavigate, Link } from 'react-router-dom'
 import Packages from '../../components/vendorComponents/Packages'
+import { StarRating } from '../../components/userComponents/StarRating'
 
 function VendorStudio () {
   const { _id } = useSelector(state => state.vendorReducer.vendor)
@@ -134,11 +134,9 @@ function VendorStudio () {
     isError: packageError
   } = useQuery({
     queryKey: ['package', { vendorId }],
-    queryFn: () => fetchPackages(vendorId) 
-  });
-  const packages = packageData?.data || [];
-  
-  
+    queryFn: () => fetchPackages(vendorId)
+  })
+  const packages = packageData?.data || []
 
   // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< PACKAGE SECTION END  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -225,7 +223,7 @@ function VendorStudio () {
       value: category._id,
       name: category.name
     }))
-  } 
+  }
 
   // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< VENDOR STUIO SECTION  END >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -250,17 +248,13 @@ function VendorStudio () {
   })
   // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< PACKAGE FORM  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
   // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  EDIT STUIDO FORM  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-  async function handleStudioEdit (values){
+  async function handleStudioEdit (values) {
     try {
-      const studioId = studio._id;
-      const res = await editStudio({...values,studioId})
-      if (res.status===201) {
+      const studioId = studio._id
+      const res = await editStudio({ ...values, studioId })
+      if (res.status === 201) {
         toast.success(res.data.message)
         setStudio(res?.data?.updatedStudio)
-        console.log(res?.data?.updatedStudio
-          ,'resssssss')
-        console.log(res?.data,'resssss6')
-        
       }
     } catch (error) {
       console.log(error.message)
@@ -279,18 +273,16 @@ function VendorStudio () {
     touched: studioTouched,
     resetForm: resetStudio
   } = useFormik({
-    initialValues: { 
-      studioName:studio?.studioName||'',
-      location : studio?.city||"",
-      description:studio?.description||"",
-      selectedCat:studio?.categories||[]
-
+    initialValues: {
+      studioName: studio?.studioName || '',
+      location: studio?.city || '',
+      description: studio?.description || '',
+      selectedCat: studio?.categories || []
     },
-    enableReinitialize: true, 
-    onSubmit:  handleStudioEdit
-  });
+    enableReinitialize: true,
+    onSubmit: handleStudioEdit
+  })
   // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  EDIT STUIDO FORM  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
   return (
     <>
       <VendorNavbar></VendorNavbar>
@@ -341,13 +333,9 @@ function VendorStudio () {
                             {studio && studio.studioName}
                           </h5>
 
-                          <div className='rating mb-6'>
-                            <div className='mask mask-star-2 bg-orange-400 w-4 h-4'></div>
-                            <div className='mask mask-star-2 bg-orange-400 w-4 h-4'></div>
-                            <div className='mask mask-star-2 bg-orange-400 w-4 h-4'></div>
-                            <div className='mask mask-star-2 bg-orange-400 w-4 h-4'></div>
-                            <div className='mask mask-star-2 bg-orange-400 w-4 h-4'></div>
-                          </div>
+                          <StarRating
+                            totalRating={studio && studio.totalRating}
+                          />
 
                           <h5 className='mb-4 text-xl font-medium leading-tight text-neutral-800 dark:text-neutral-50'>
                             {' '}
@@ -373,19 +361,18 @@ function VendorStudio () {
                             onClick={openEditModal}
                             type='button'
                             className='mb-2 block w-full rounded border-2 border-danger px-6 pb-[6px] pt-2 text-xs font-medium uppercase leading-normal text-danger transition duration-150 ease-in-out hover:border-primary-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-primary-600 focus:border-primary-600 focus:text-primary-600 focus:outline-none focus:ring-0 active:border-danger-700 active:text-danger-700 dark:hover:bg-neutral-100 dark:hover:bg-opacity-10'
-                            data-te-toggle="modal"
-                            data-te-target="#editModal"
+                            data-te-toggle='modal'
+                            data-te-target='#editModal'
                             data-te-ripple-init
-                            data-te-ripple-color="light"
+                            data-te-ripple-color='light'
                           >
                             Edit Studio
-                          </button > 
-                            <Link to={`/vendor/bookings/${vendorId}`}>
-                          <button  
-                          className='mb-2 block w-full rounded border-2 border-success px-6 pb-[6px] pt-2 text-xs font-medium uppercase leading-normal text-success transition duration-150 ease-in-out hover:border-primary-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-primary-600 focus:border-primary-600 focus:text-primary-600 focus:outline-none focus:ring-0 active:border-danger-700 active:text-danger-700 dark:hover:bg-neutral-100 dark:hover:bg-opacity-10'>
-                           View bookings
                           </button>
-                            </Link>
+                          <Link to={`/vendor/bookings/${vendorId}`}>
+                            <button className='mb-2 block w-full rounded border-2 border-success px-6 pb-[6px] pt-2 text-xs font-medium uppercase leading-normal text-success transition duration-150 ease-in-out hover:border-primary-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-primary-600 focus:border-primary-600 focus:text-primary-600 focus:outline-none focus:ring-0 active:border-danger-700 active:text-danger-700 dark:hover:bg-neutral-100 dark:hover:bg-opacity-10'>
+                              View bookings
+                            </button>
+                          </Link>
                         </div>
                       </div>
                     </div>
@@ -402,135 +389,140 @@ function VendorStudio () {
                 </>
               </div>
             </div>
- {/* Edit modal body */}
- <div
-  data-te-modal-init=""
-  className="fixed left-0 top-0 z-[1055] hidden h-full w-1/2 overflow-y-auto overflow-x-hidden outline-none"
-  id="editModal"
-  tabIndex={-1}
-  aria-labelledby="editModalLabel"
-  aria-modal="true"
-  role="dialog"
->
-  <div
-    data-te-modal-dialog-ref=""
-    className="pointer-events-none relative w-auto translate-y-[-50px] opacity-0 transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:max-w-[500px] min-[992px]:max-w-[800px]"
-  >
-    <div className="pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none dark:bg-neutral-600">
-      <div className="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
-        {/*Modal title*/}
-        <h5
-          className="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200"
-          id="editModalLabel"
-        >
-          Edit studio
-        </h5>
-        {/*Close button*/}
-        <button
-          type="button"
-          className="box-content rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none"
-          data-te-modal-dismiss=""
-          aria-label="Close"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="h-6 w-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </button>
-      </div>
-      {/*Modal body*/}
-      <div className="relative p-4">
-      <form onSubmit={handleSubmitStudio} className='p-4 md:p-5'>
-                  <div className='grid gap-4 mb-4 grid-cols-2'>
-                    <div className='col-span-2'>
-                      <label
-                        htmlFor='name'
-                        className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
+            {/* Edit modal body */}
+            <div
+              data-te-modal-init=''
+              className='fixed left-0 top-0 z-[1055] hidden h-full w-full md:w-1/2 overflow-y-auto overflow-x-hidden outline-none'
+              id='editModal'
+              tabIndex={-1}
+              aria-labelledby='editModalLabel'
+              aria-modal='true'
+              role='dialog'
+            >
+              <div
+                data-te-modal-dialog-ref=''
+                className='pointer-events-none relative w-auto translate-y-[-50px] opacity-0 transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:max-w-[500px] min-[992px]:max-w-[800px]'
+              >
+                <div className='pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none dark:bg-neutral-600'>
+                  <div className='flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50'>
+                    {/*Modal title*/}
+                    <h5
+                      className='text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200'
+                      id='editModalLabel'
+                    >
+                      Edit studio
+                    </h5>
+                    {/*Close button*/}
+                    <button
+                      type='button'
+                      className='box-content rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none'
+                      data-te-modal-dismiss=''
+                      aria-label='Close'
+                    >
+                      <svg
+                        xmlns='http://www.w3.org/2000/svg'
+                        fill='none'
+                        viewBox='0 0 24 24'
+                        strokeWidth='1.5'
+                        stroke='currentColor'
+                        className='h-6 w-6'
                       >
-                        Name
-                      </label>
-                      <input
-                        type='text'
-                        name='studioName'
-                        id='name' 
-                        value={studioValues.studioName}
-                        onChange={handleChangeStudio}
-                        onBlur={handleBlurStudio}
-                        className='input input-bordered w-full bg-blue-gray-50'
-                        placeholder='Type studio name'
-                        required=''
-                      />
-                      {touched.studioName && errors.studioName && (
-                        <div className='text-red-500 text-sm'>
-                          {errors.studioName}
+                        <path
+                          strokeLinecap='round'
+                          strokeLinejoin='round'
+                          d='M6 18L18 6M6 6l12 12'
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  {/*Modal body*/}
+                  <div className='relative p-4'>
+                    <form onSubmit={handleSubmitStudio} className='p-4 md:p-5'>
+                      <div className='grid gap-4 mb-4 grid-cols-2'>
+                        <div className='col-span-2'>
+                          <label
+                            htmlFor='name'
+                            className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
+                          >
+                            Name
+                          </label>
+                          <input
+                            type='text'
+                            name='studioName'
+                            id='name'
+                            value={studioValues.studioName}
+                            onChange={handleChangeStudio}
+                            onBlur={handleBlurStudio}
+                            className='input input-bordered w-full bg-blue-gray-50'
+                            placeholder='Type studio name'
+                            required=''
+                          />
+                          {touched.studioName && errors.studioName && (
+                            <div className='text-red-500 text-sm'>
+                              {errors.studioName}
+                            </div>
+                          )}
                         </div>
-                      )}
-                    </div>
-                    <div className='col-span-2'>
-                      <label
-                        htmlFor='name'
-                        className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
-                      >
-                        City
-                      </label>
-                      <input
-                        type='text'
-                        name='location'
-                        id='location'
-                        value={studioValues.location} 
-                        onChange={handleChangeStudio}
-                        onBlur={handleBlurStudio}
-                        
-                        className='input input-bordered w-full bg-blue-gray-50'
-                        placeholder='city'
-                        required=''
-                      />
-                      {touched.location && errors.location && (
-                        <div className='text-red-500 text-sm'>
-                          {' '}
-                          {errors.location}
+                        <div className='col-span-2'>
+                          <label
+                            htmlFor='name'
+                            className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
+                          >
+                            City
+                          </label>
+                          <input
+                            type='text'
+                            name='location'
+                            id='location'
+                            value={studioValues.location}
+                            onChange={handleChangeStudio}
+                            onBlur={handleBlurStudio}
+                            className='input input-bordered w-full bg-blue-gray-50'
+                            placeholder='city'
+                            required=''
+                          />
+                          {touched.location && errors.location && (
+                            <div className='text-red-500 text-sm'>
+                              {' '}
+                              {errors.location}
+                            </div>
+                          )}
                         </div>
-                      )}
-                    </div>
-                    <div className='col-span-2 z-10'>
-                      <label
-                        htmlFor='category'
-                        className='block mb-2 text-sm  t font-medium text-gray-900 dark:text-white'
-                      >
-                        Category
-                      </label>
-                      <Multiselect
-                        options={options}
-                        value={studioValues.selectedCat} // Use values.selectedCat
-                        onSelect={selectedList => {
-                          handleChangeStudio({
-                            target: { name: 'selectedCat', value: selectedList }
-                          })
-                        }}
-                        onRemove={selectedList => {
-                          handleChangeStudio({
-                            target: { name: 'selectedCat', value: selectedList }
-                          })
-                        }}
-                        labelledBy={'Select'}
-                        isCreatable={true}
-                        displayValue='name'
-                        closeOnSelect={false}
-                        className='text-gray-900 w-full bg-blue-gray-50'
-                      />
-                    </div>
-                   
-                    {/* <div className='col-span-2'>
+                        <div className='col-span-2 z-10'>
+                          <label
+                            htmlFor='category'
+                            className='block mb-2 text-sm  t font-medium text-gray-900 dark:text-white'
+                          >
+                            Category
+                          </label>
+                          <Multiselect
+                            options={options}
+                            value={studioValues.selectedCat} // Use values.selectedCat
+                            onSelect={selectedList => {
+                              handleChangeStudio({
+                                target: {
+                                  name: 'selectedCat',
+                                  value: selectedList
+                                }
+                              })
+                            }}
+                            onRemove={selectedList => {
+                              handleChangeStudio({
+                                target: {
+                                  name: 'selectedCat',
+                                  value: selectedList
+                                }
+                              })
+                            }}
+                            labelledBy={'Select'}
+                            isCreatable={true}
+                            displayValue='name'
+                            closeOnSelect={false}
+                            className='text-gray-900 w-full bg-blue-gray-50'
+                          />
+                        </div>
+
+                        {/* <div className='col-span-2'>
                       <label
                         htmlFor='galleryImages'
                         className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
@@ -556,55 +548,53 @@ function VendorStudio () {
                       </div>
                     </div> */}
 
-                    <div className='col-span-2'> 
-                      <label
-                        htmlFor='description'
-                        className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
-                      >
-                        About the Studio
-                      </label>
-                      <textarea
-                        id='description'
-                        name='description'
-                        onChange={handleChangeStudio} 
-                        onBlur={handleBlurStudio} 
-                        value={studioValues.description}
-                        rows={4}
-                        maxLength={200} // Add a character limit
-                        className='input input-bordered input-lg w-full bg-blue-gray-50'
-                        placeholder='Write a brief description'
-                      />
-                      {errors.description && touched.description && (
-                        <div className='text-red-500 text-sm'>
-                          {errors.description}
+                        <div className='col-span-2'>
+                          <label
+                            htmlFor='description'
+                            className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
+                          >
+                            About the Studio
+                          </label>
+                          <textarea
+                            id='description'
+                            name='description'
+                            onChange={handleChangeStudio}
+                            onBlur={handleBlurStudio}
+                            value={studioValues.description}
+                            rows={4}
+                            maxLength={200} // Add a character limit
+                            className='input input-bordered input-lg w-full bg-blue-gray-50'
+                            placeholder='Write a brief description'
+                          />
+                          {errors.description && touched.description && (
+                            <div className='text-red-500 text-sm'>
+                              {errors.description}
+                            </div>
+                          )}
                         </div>
-                      )}
-                    </div>
-                  </div>
-                  <button
-                    type='submit'
-                    className={`text-white btn inline-flex items-center bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800
+                      </div>
+                      <button
+                        type='submit'
+                        className={`text-white btn inline-flex items-center bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800
                     ${isLoading ? 'opacity-95 cursor-not-allowed' : ''}`}
-                    disabled={isLoading}
-                  >
-                    {isLoading && (
-                      <>
-                        <span className='text-white text-center'>
-                          Creating...
-                        </span>
-                      </>
-                    )}
-                    {!isLoading && 'Edit'}
-                  </button>
-                </form>
+                        disabled={isLoading}
+                      >
+                        {isLoading && (
+                          <>
+                            <span className='text-white text-center'>
+                              Creating...
+                            </span>
+                          </>
+                        )}
+                        {!isLoading && 'Edit'}
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-
-      </div>
-    </div>
-  </div>
-</div>
-
- {/* Edit modal body */}
+            {/* Edit modal body */}
             {/* Right Gallery */}
 
             <div className='w-full md:w-1/2 flex flex-wrap'>
@@ -626,8 +616,8 @@ function VendorStudio () {
                   Packages
                 </h5>
 
-                <Packages packages={packages}/>
-                
+                <Packages packages={packages} />
+
                 {/* ////////////////////////////////////////////////////////////////////        */}
 
                 <>
@@ -853,7 +843,7 @@ function VendorStudio () {
                                             </span>
                                           </button>
                                         </span>
-                                      </li> 
+                                      </li>
                                     ))}
                                   </ul>
                                 </div>
@@ -930,7 +920,6 @@ function VendorStudio () {
               </div>
             </div>
           </div>
-          
         </>
       )}
 

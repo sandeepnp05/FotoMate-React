@@ -11,7 +11,6 @@ function VendorSignup () {
 
   const onSubmit = async () =>{
     try {
-      console.log("Submit button clicked");
       const res = await vendorSignup(values)
       if(res?.status === 201){
         const {vendor, otpId} = res.data;

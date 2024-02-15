@@ -18,6 +18,7 @@ import Cancel from '../pages/userPages/Cancel'
 import Success from '../pages/userPages/Success'
 import Checkout from '../pages/userPages/Checkout'
 import Chat from '../pages/userPages/Chat'
+import Review from '../pages/userPages/Review'
 
 function UserRoute() {
   return (
@@ -38,6 +39,7 @@ function UserRoute() {
         <Route path='/success'element={<Success/>}/>
         <Route path='/cancel'element={<Cancel/>}/>
         <Route path='/chat/:id' element= {<Chat/>}/>
+        <Route path='/review/:studioId'element={<Review/>}/>
         <Route path='/*'element={<NotFound/>}/>
 
 

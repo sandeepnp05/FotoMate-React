@@ -6,7 +6,7 @@ import { bookingPackage } from '../../api/userApi'
 import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
-import * as Yup from 'yup';
+import * as Yup from 'yup'
 import Multiselect from 'multiselect-react-dropdown'
 initTE({ Modal, Ripple })
 
@@ -20,9 +20,7 @@ function Packages ({ packages, cities }) {
     const modal = new Modal(document.getElementById('bookingModal'))
     modal.show()
   }
-  console.log(selectedPackageId,'selpackId 1')
   const onSubmit = async () => {
-    console.log('clicked')
     try {
       const res = await bookingPackage({
         ...values,
@@ -30,10 +28,10 @@ function Packages ({ packages, cities }) {
         userId: _id
       })
       if (res.status === 200) {
-        const responseData = res.data;
+        const responseData = res.data
         // toast.success('Booking completed successfully')
-        navigate(`/checkout`,{
-          state: { responseData ,...values}
+        navigate(`/checkout`, {
+          state: { responseData, ...values }
         })
       }
     } catch (error) {
@@ -107,7 +105,7 @@ function Packages ({ packages, cities }) {
               {/* modal ///////////////////////////////////////////////// */}
               <div
                 data-te-modal-init=''
-                className='fixed left-28 top-20 z-[1055] hidden h-full w-1/2 overflow-y-auto overflow-x-hidden outline-none'
+                className='fixed px-6 left-0 top-20 z-[1055] hidden h-full w-full md:w-1/2 overflow-y-auto overflow-x-hidden outline-none'
                 id='bookingModal'
                 tabIndex={-1}
                 aria-labelledby='bookingModal'
@@ -207,10 +205,9 @@ function Packages ({ packages, cities }) {
                             id='disabled-input-2'
                             aria-label='disabled input 2'
                             className='bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500'
-                            value={`₹ ${totalPrice*.2}`}
+                            value={`₹ ${totalPrice * 0.2}`}
                             disabled
                             readOnly
-                            
                           ></input>
                           <button
                             type='submit'

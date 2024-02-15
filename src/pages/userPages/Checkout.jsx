@@ -13,7 +13,6 @@ function Checkout() {
     const { state } = useLocation();
     const { responseData, ...values } = state ? state : {};
     const { date, place, selectedPlace } = values;
-    console.log(values,'date')
   
     
     const { user } = useSelector((state) => state.userReducer);
@@ -22,7 +21,6 @@ function Checkout() {
         initFlowbite();
       }, []);
 
-      console.log(responseData,'hii')
    
 
       
@@ -35,7 +33,6 @@ function Checkout() {
         try {
        
           const session = await paymentCheckout(body)
-          console.log(session,'session')
            const result = await stripe.redirectToCheckout({
             sessionId: session.data.id,
           });

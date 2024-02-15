@@ -17,14 +17,12 @@ function UploadWidget({ onImageUpload, isImage }) {
 
   useEffect(() => {
     cloudinary.current = window.cloudinary;
-    console.log('Cloudinary library loaded:', cloudinary.current);
     widget.current = window.cloudinary.createUploadWidget(
       {
         cloudName: 'dti7ahrb6',
         uploadPreset: 'hioivxkt',
       },
       function (error, result) {
-        console.log('Cloudinary upload callback:', error, result);
         switch (result.event) {
           case 'success':
             onImageUpload(result.info.secure_url);

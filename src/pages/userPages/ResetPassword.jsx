@@ -34,7 +34,6 @@ function ResetPassword () {
       const res = await resetPassword(id, token, values.password)
       if (res.status === 200) {
         toast.success(res?.data?.message)
-        console.log('success')
         navigate('/login')
       }
     } catch (error) {

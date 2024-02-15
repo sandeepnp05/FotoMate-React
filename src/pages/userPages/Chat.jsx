@@ -10,6 +10,7 @@ import { sendMessageApi } from '../../api/messageApi'
 import { UserNavbar } from './UserNavbar'
 
 const ENDPOINT='https://fotomate.swoz.shop'
+// const ENDPOINT='https://localhost:3000'
 var socket, selectedChatCompare
 
 function Chat () {
@@ -34,16 +35,13 @@ function Chat () {
     socket.on('connect', () => {
       setSocketConnected(true);
       socket.emit('setup', id);
-      console.log('Connected to socket.io');
     });
   
     socket.on('disconnect', () => {
       setSocketConnected(false);
-      console.log('Disconnected from socket.io');
     });
   
     socket.on('receive_message', (newMessage) => {
-      console.log('Received message:', newMessage);
       setAllChats((prevChats) => [...prevChats, newMessage]);
     });
   
@@ -52,7 +50,6 @@ function Chat () {
     };
   }, []);
 
-  console.log(chat,'chat')
   
   
 
@@ -74,7 +71,6 @@ function Chat () {
       const { data } = await sendMessageApi(messsage)
       
       newOne = data?.savedMessage
-      console.log(newOne,'newOne')
       setAllChats((prevChats)=>[...prevChats,newOne])
       socket.emit('send-message',newOne)
       setNewMessage('');
@@ -97,7 +93,6 @@ function Chat () {
     queryKey: ['user'],
     queryFn: () => getUser(id)
   })
-console.log(userData,'userData')
   const { error: studioError, data: studioData } = useQuery({
     queryKey: ['studio'],
     queryFn: () => getVendor(vendorId)

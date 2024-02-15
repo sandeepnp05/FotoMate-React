@@ -14,7 +14,6 @@ function ChatList({ vendorId, onUserSelect }) {
       onUserSelect(userId);
     }
   };
-  console.log(chatList,'chatList')
 
   return (
     <div>

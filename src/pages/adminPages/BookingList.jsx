@@ -13,9 +13,7 @@ function BookingList () {
 
   const handleSubmit = async e => {
     e.preventDefault()
-    console.log('Reason:', reason)
     const { data } = await cancelBooking(reason, bookingId)
-    console.log(data, 'cancel data')
     const myModal = document.getElementById('my_modal_1')
     myModal.close()
   }
@@ -24,7 +22,6 @@ function BookingList () {
     queryKey: ['booking'],
     queryFn: async () => await getBookingList()
   })
-  console.log(data, 'bookingList')
 
   return (
     <>

@@ -18,28 +18,22 @@ export const blockUser = async(userId,status)=>{
 export const vendorList = async()=>{
     try {
         const data = await adminAxioseInstance.get('/vendorList')
-        console.log(data,'rom admin api vendorList')
         return data;
     } catch (error) {
         console.log(error.message)
-        console.log('object')
     }
 }
 export const blockVendor = async(vendorId,status)=>{
-    console.log('working api')
    try {
     const data = await adminAxioseInstance.patch('/vendorBlock',{vendorId,status})
-    console.log(data,'data api')
     return data;
    } catch (error) {
     
    }
 }
 export const blockStudio = async ( studioId, status ) => {
-    console.log('working api');
     try {
       const data = await adminAxioseInstance.patch('/studioBlock', { studioId, status });
-      console.log(data, 'data api');
       return data;
     } catch (error) {
       console.error('Axios Error:', error);
@@ -50,7 +44,6 @@ export const blockStudio = async ( studioId, status ) => {
   export const addCategory = async (categoryData)=>{
     try {
         const data = await adminAxioseInstance.post('/addCategory',categoryData)
-        console.log(categoryData,'api data')
         
         return data;
     } catch (error) {
@@ -77,8 +70,6 @@ export const blockStudio = async ( studioId, status ) => {
   } 
   export const edit_category = async(cat_id,name,description)=>{
     try {
-        console.log('from api')
-        console.log(cat_id,name,description,'cat_id,name,description from api')
         const data = await adminAxioseInstance.patch(`/editCategory/${cat_id}`,{cat_id,name,description})
         return data;
     } catch (error) {
@@ -103,7 +94,6 @@ export const blockStudio = async ( studioId, status ) => {
   export const subcategories = async(cat_id)=>{
     try {
         const data = await adminAxioseInstance.get(`/subcategory/${cat_id}`)
-        console.log(data,'data')
         return data;
     } catch (error) {
         console.log(error.message)

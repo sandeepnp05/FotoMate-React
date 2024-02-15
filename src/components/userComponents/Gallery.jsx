@@ -9,7 +9,6 @@ function Gallery ({ catId }) {
 
   const fetchStudios = async ({ pageParam = 1 }) => {
     const res = await studioList(catId, pageParam);
-    console.log('Fetched studios:', res.data.studios); 
     return res.data;
   };
   
@@ -19,7 +18,6 @@ function Gallery ({ catId }) {
     queryKey: ['studios', catId],
     queryFn: fetchStudios,
     getNextPageParam: (lastPage, pages) => {
-      console.log('Last page:', lastPage); // Log last page
       return lastPage.nextPage;
     },
   });
@@ -31,7 +29,6 @@ function Gallery ({ catId }) {
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting && !isLoading && hasNextPage) {
-          console.log('Intersection observed, fetching next page');
           fetchNextPage();
         }
       },

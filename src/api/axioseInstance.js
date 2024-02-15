@@ -106,7 +106,6 @@ const handleAxiosError = (error, role) => {
         window.location.href = `/admin`;
       }
     } else {
-      console.log("hi from axios");
       toast.error(errorMessage);
     }
   } else {

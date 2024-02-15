@@ -36,7 +36,6 @@ function UserHome () {
     isLoading,
     error
   } = useQuery({ queryKey: ['categories'], queryFn: getCategories })
-  console.log(category, 'category')
 
   const {
     data: filteredStudios,
@@ -60,12 +59,12 @@ function UserHome () {
   };
 
   const handleSearchTerm = (event) => {
-    console.log('Search Term:', event.target.value);
     setSearchTerm(event.target.value);
   };
-  console.log(catFilter, 'catfilter')
   return (
-    <div>
+    <>
+    <div className="fixed inset-0 z-0 min-h-screen w-full bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]"></div>
+    <div className="relative z-10">
       <UserNavbar />
       <UserHeader />
 
@@ -154,8 +153,13 @@ function UserHome () {
       <div className='mt-12'>
         <Gallery catId={catFilter} />
       </div>
-      <UserFooter />
+      <div className=" bottom-0 left-0 w-full z-50">
+  <UserFooter />
+</div>
+
     </div>
+    <div className="inset-0 -z-10 min-h-screen w-full bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]"></div>
+    </>
   )
 }
 

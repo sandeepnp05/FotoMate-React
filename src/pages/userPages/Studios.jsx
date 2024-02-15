@@ -5,6 +5,7 @@ import { initFlowbite } from 'flowbite';
 import { filterCategories, getCategories } from '../../api/userApi';
 import UserFooter from '../../components/userComponents/UserFooter';
 import { useQuery } from '@tanstack/react-query';
+import UserReviews from '../../components/userComponents/UserReviews';
 
 function Studios() {
   const [catFilter, setCatFilter] = useState([]);
@@ -63,6 +64,8 @@ function Studios() {
   
   return (
     <>
+    <div className="fixed inset-0 z-0 min-h-screen w-full bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]"></div>
+    <div className="relative z-10">
       <UserNavbar />
 
       <form className='mt-40 px-14'>
@@ -150,6 +153,8 @@ function Studios() {
       <div className='mt-20'>
         <Gallery catId={catFilter} />
       </div>
+      </div>
+      
       <UserFooter />
     </>
   );

@@ -11,7 +11,6 @@ function AddSubCategory () {
 
   async function onSubmit () {
     try {
-        console.log(id,values,'id and values')
       const res = await add_subcategory({ id, values,baseImage })
       
       if (res.status===200) {

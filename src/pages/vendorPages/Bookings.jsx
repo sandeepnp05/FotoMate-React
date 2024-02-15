@@ -22,7 +22,6 @@ function Bookings () {
   if (isError) {
     return <div>Error occurred while fetching user details</div>
   }
-  console.log(data,'userData')
   return (
       <>
         <VendorNavbar />

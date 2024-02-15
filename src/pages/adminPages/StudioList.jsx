@@ -54,7 +54,6 @@ function StudioList () {
     }
   };
   
-  console.log(studio, 'studio')
   const filteredData = studio
 
   const lastIndex = currentPage * dataPerPage

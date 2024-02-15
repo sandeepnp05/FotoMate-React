@@ -1,83 +1,71 @@
-import { useFormik } from 'formik';
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
-import { loginSchema } from '../../validations/user/loginValidation';
-import { loginVerification } from '../../api/userApi';
-import { userLogin } from '../../reduxStore/slices/userSlice';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { UserNavbar } from './UserNavbar';
-import Oauth from '../../components/userComponents/Oauth';
-import { Button } from '@material-tailwind/react';
+import { useFormik } from 'formik'
+import React from 'react'
+import { useDispatch } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
+import { loginSchema } from '../../validations/user/loginValidation'
+import { loginVerification } from '../../api/userApi'
+import { userLogin } from '../../reduxStore/slices/userSlice'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import { UserNavbar } from './UserNavbar'
+import Oauth from '../../components/userComponents/Oauth'
+import { Button } from '@material-tailwind/react'
 
-function UserLogin() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+function UserLogin () {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
-  const {
-    errors,
-    values,
-    handleChange,
-    handleSubmit,
-    touched,
-    handleBlur,
-  } = useFormik({
-    initialValues: {
-      email: '',
-      password: '',
-    },
-    validationSchema: loginSchema,
-    onSubmit,
-  });
+  const { errors, values, handleChange, handleSubmit, touched, handleBlur } =
+    useFormik({
+      initialValues: {
+        email: '',
+        password: ''
+      },
+      validationSchema: loginSchema,
+      onSubmit
+    })
 
-  async function onSubmit() {
+  async function onSubmit () {
     try {
-      const res = await loginVerification(values);
-      console.log('submit button clicked')
-      console.log(res, 'response');
+      const res = await loginVerification(values)
       if (res?.status === 200) {
-        const { user, token } = res.data;
-        localStorage.setItem('userToken', token);
+        const { user, token } = res.data
+        localStorage.setItem('userToken', token)
         dispatch(
           userLogin({
             user: user,
-            token: token,
+            token: token
           })
-        );
-        toast.success(res?.data?.message);
-        console.log('success');
-        navigate('/');
+        )
+        toast.success(res?.data?.message)
+        navigate('/')
       }
     } catch (error) {
-      toast.error(error.response?.data?.message);
-      console.log(error.message);
+      toast.error(error.response?.data?.message)
+      console.log(error.message)
     }
   }
 
-
-  const isFullWidth = window.innerWidth === window.screen.width;
+  const isFullWidth = window.innerWidth === window.screen.width
   return (
     <>
       <div
-        className='flex flex-col bg-cover md:bg-contain lg:bg-cover min-h-screen  bg-black bg-opacity-50'
-        style={{
-          backgroundImage: "url('/src/assets/wedding1.jpg')",
-        }}
-     >
-      <div
-    className='absolute w-full bg-cover  min-h-full'
-  />
+      className='mt-12 flex-flex col absolute top-0 z-[-2] min-h-screen w-screen bg-[#000000] bg-[radial-gradient(#ffffff33_1px,#00091d_1px)] bg-[size:20px_20px]'
+
+        // style={{
+        //   backgroundImage: "url('/src/assets/wedding1.jpg')",
+        // }}
+      >
         <UserNavbar></UserNavbar>
-        <div className='mt-8 p-4 md:p-8 lg:w-1/2'>
+        <div className='flex-grow mt-36 md:mt-8 p-4 md:p-4 lg:w-1/2'>
           <div className='hero-content flex-col lg:flex-row-reverse text-black'>
             <div className='text-center lg:text-left'></div>
             <div
-              className='card w-full max-w-md mx-auto shadow-2xl bg-base-100'
+              className='item-center justify-center card w-full max-w-md mx-auto shadow-2xl bg-base-100'
               style={{
                 backdropFilter: 'blur(1px)',
                 borderRadius: '20px',
-                background: 'rgba(255, 255, 255, 0.3)',
+                background: 'rgba(255, 255, 255, .9)'
               }}
             >
               <form onSubmit={handleSubmit} className='card-body'>
@@ -125,7 +113,10 @@ function UserLogin() {
                   </label>
                 </div>
                 <div className='form-control mt-'>
-                  <Button type='submit' className='bg-indigo-900 hover:bg-indigo-800 w-full'>
+                  <Button
+                    type='submit'
+                    className='bg-indigo-900 hover:bg-indigo-800 w-full'
+                  >
                     Login
                   </Button>
                   <Oauth />
@@ -147,7 +138,7 @@ function UserLogin() {
         </div>
       </div>
     </>
-  );
+  )
 }
 
-export default UserLogin;
+export default UserLogin

@@ -9,7 +9,6 @@ function EditCategory() {
     const navigate = useNavigate()
     const [category, setCategory] = useState({});
     const { cat_id } = useParams();
-    console.log(cat_id,'cat_idllllll')
 
     useEffect(() => {
         const fetchData = async () => {
@@ -22,12 +21,10 @@ function EditCategory() {
         };
         fetchData();
     }, [cat_id]);
-     console.log(category,'category')
      
    async  function handleEdit(values){
     try {
       const {name,description} = values;
-      console.log(name,description,'name,description')
       const res = await edit_category(cat_id,name,description)
       if (res.status===201) {
         toast.success(res.data.message);

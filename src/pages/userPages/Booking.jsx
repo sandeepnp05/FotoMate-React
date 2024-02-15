@@ -17,9 +17,7 @@ function Booking () {
 
   const handleSubmit = async e => {
     e.preventDefault()
-    console.log('Reason:', reason)
     const { data } = await cancelBookings(reason, bookingId)
-    console.log(data, 'cancel data')
     const myModal = document.getElementById('my_modal_1')
     setReason('')
     myModal.close()
@@ -44,7 +42,19 @@ function Booking () {
   if (isError) {
     return <div>Error occurred while fetching user details</div>
   }
-  console.log(data,'data')
+
+  if (!data?.data || data?.data.bookingData.length ===0) {
+    return (
+      <>
+        <UserNavbar />
+        <div className="mt-36">
+          <h1 className="text-center text-lg mb-8">You have no bookings</h1>
+          <p className="text-center">You can explore available studios <Link  className='mouse-pointer underline btn-sm btn-link' to="/studios">here</Link></p>
+        </div>
+        {/* <UserFooter/> */}
+      </>
+    );
+  }
 
   return (
     <>

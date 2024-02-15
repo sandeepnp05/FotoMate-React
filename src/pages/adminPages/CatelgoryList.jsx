@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import { adminCategoryList, unlistCategory } from '../../api/adminApi'
+import { ConstructionOutlined } from '@mui/icons-material'
 
 function CategoryList () {
   const [category, setCategories] = useState([])
@@ -23,7 +24,6 @@ function CategoryList () {
 
   async function handleUnlist (cat_id,status) {
     try {
-      console.log('working')
       const response = await unlistCategory(cat_id,status)
       
       if (response.status === 200) {
@@ -32,9 +32,10 @@ function CategoryList () {
           cat._id === cat_id ? { ...cat, unlist: !status } : cat
         )
       );
-        console.log('Category unlisted successfully')
+        toast.success('Category unlisted successfully')
       } else {
-        console.error('Unsuccessful response status:', response.status)
+        toast.error('Category unilist failed')
+        console.log('Unsuccessful response status:', response.status)
       }
     } catch (error) {
       console.error('handle axiose', error)

@@ -15,7 +15,6 @@
     const onSubmit = async () => {
         try {
         const res = await adminLoginVerify(values);
-        console.log(res,'from cleint')
         if (res?.status === 200) {
             const { token, userName } = res.data;
             localStorage.setItem("adminToken", token);

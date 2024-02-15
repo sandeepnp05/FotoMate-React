@@ -22,7 +22,6 @@ function VendorHero ({ studio }) {
   const [cities, setCities] = useState([])
   const [cityName, setCityName] = useState('')
   const [buttonDisplay, setButtonDisplay] = useState('none')
-  console.log(cities, 'cities')
   // const [selectedCat, setSelectedCat] = useState([])
   const navigate = useNavigate()
   const { _id } = useSelector(state => state.vendorReducer.vendor)
@@ -82,10 +81,7 @@ function VendorHero ({ studio }) {
       file =>
         file.type.startsWith('image/jpeg') || file.type.startsWith('image/png')
     )
-    console.log(
-      'Image types:',
-      files.map(file => file.type)
-    )
+    
     if (isValid) {
       setGalleryImageToBase(files)
     }
@@ -101,7 +97,6 @@ function VendorHero ({ studio }) {
         setGalleryImage(prev => [...prev, reader.result])
 
         if (i === files.length - 1) {
-          console.log('All images processed:', galleryImages)
         }
       }
 
@@ -127,7 +122,6 @@ function VendorHero ({ studio }) {
   }
 
   const handleAddCities = () => {
-    console.log('City Name:', cityName)
     if (cityName) {
       const newCity = {
         cityName
@@ -135,7 +129,7 @@ function VendorHero ({ studio }) {
       setCities(prevCities => [...prevCities, newCity])
       setCityName('')
     } else {
-      console.log('Please enter city name')
+      toast.error('Please enter city name')
     }
   }
 
@@ -154,9 +148,7 @@ function VendorHero ({ studio }) {
     queryFn: () => getCategories()
   })
 
-  console.log(data, 'data')
   const options = data?.map(item => ({ name: item.name }))
-  console.log(options, 'options')
 
   const { errors, handleBlur, handleChange, handleSubmit, values, touched } =
     useFormik({
@@ -169,10 +161,11 @@ function VendorHero ({ studio }) {
       // validationSchema: studioSchema,
       onSubmit
     })
-  console.log(options, 'options')
   return (
     <>
-      <section className='bg-black dark:bg-gray-900'>
+    <div className='relative h-screen overflow-hidden'>
+    <div className="absolute top-0 z-[-2] h-full w-full bg-neutral-950 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]">
+      <section className=''>
         <div className='grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12'>
           <div className='mr-auto place-self-center lg:col-span-7'>
             <h1 className='max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl text-gray-400'>
@@ -229,7 +222,7 @@ function VendorHero ({ studio }) {
             id='crud-modal'
             tabIndex={-1}
             aria-hidden='true'
-            className='overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full'
+            className='overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100% - 1rem)] max-h-full'
           >
             <div className='relative p-4 w-full max-w-md  max-h-full'>
               {/* Modal content */}
@@ -328,7 +321,6 @@ function VendorHero ({ studio }) {
                         id='cityName'
                         value={cityName}
                         onChange={e => {
-                          console.log('Input Value:', e.target.value) // Log the input value
                           setCityName(e.target.value)
                           updateButtonDisplay(e.target.value)
                         }}
@@ -519,6 +511,8 @@ function VendorHero ({ studio }) {
           </div>
         )}
       </>
+        </div>
+        </div>
     </>
   )
 }

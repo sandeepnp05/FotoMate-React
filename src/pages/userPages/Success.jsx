@@ -1,7 +1,11 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
+
 function Success() {
+  let params = new URLSearchParams(window.location.search);
+  let studioId = params.get('studioId');
+
   return (
     <div>
      <div className="bg-gray-100 h-screen">
@@ -25,10 +29,8 @@ function Success() {
           <p>Have a great day!</p>
           <div className="py-4">
             <p className="text-gray-600 my-2">  </p>
-            {/* <div>{stars}</div> */}
             <Link to={'/booking'}>
             <button
-            //   onClick={handleRatingSubmit}
               className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold mt-2"
             >
              view bookings
@@ -37,10 +39,10 @@ function Success() {
           </div>
           <div className="py-6 text-center">
             <Link
-              to={"/"}
+              to={`/review/${studioId}`}
               className="px-12 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3"
             >
-              GO BACK
+             Please rate us
             </Link>
           </div>
         </div>

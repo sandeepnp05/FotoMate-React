@@ -9,8 +9,9 @@ import { getChatList, getChats, getUser, getVendor } from '../../api/chatApi'
 import { useSelector } from 'react-redux'
 import { sendMessageApi } from '../../api/messageApi'
 import VendorNavbar from '../../components/vendorComponents/vendorCommon/VendorNavbar'
-
+ 
 const ENDPOINT = 'https://fotomate.swoz.shop'
+// const ENDPOINT = 'https://localhost:3000' 
 var socket, selectedChatCompare
 
 function vendorChat () {
@@ -45,12 +46,10 @@ function vendorChat () {
     socket.on('connect', () => {
       setSocketConnected(true)
       socket.emit('setup', vendorId)
-      console.log('Connected to socket.io')
     })
 
     socket.on('disconnect', () => {
       setSocketConnected(false)
-      console.log('Disconnected from socket.io')
     })
 
     socket.on('receive_message', newMessage => {
@@ -104,8 +103,6 @@ function vendorChat () {
     queryKey: ['user'],
     queryFn: () => getUser(userId)
   })
-   console.log(userData,'userData1')
-   console.log(id,'id')
 
   const { error: studioError, data: studioData } = useQuery({
     queryKey: ['studio'],
@@ -169,8 +166,6 @@ function vendorChat () {
   useEffect(()=>{       
     setSelectedUser(userData?.data)
   },[id])
- console.log(selectedUser &&selectedUser,'selectedUser')
- console.log(userData&&userData?.data,'userData')
   return (
     <>
       <VendorNavbar /> 

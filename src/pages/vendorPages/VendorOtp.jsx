@@ -31,16 +31,13 @@ function VendorOtp () {
   const onSubmit = async () => {
     try {
       const combinedOtp = Object.values(values).join('');
-      console.log('working1')
       const res = await vendorOtpVerifiaction(combinedOtp, vendorId);
-      console.log('working2')
   
       if (res?.data?.status) {
         toast.success(res?.data?.message);
         navigate('/vendor/login', { state: 'Email verified' });
       }
     } catch (error) {
-        console.log(error);
         console.log(error.message);
   
       // Check if error.response exists before accessing its properties

@@ -12,7 +12,6 @@ function SubCategory() {
         const fetchSubCategories = async () => {
           try {
             const res = await subcategories(id);
-            console.log(res,'res')
             setSubCategories(res?.data);
           } catch (error) {
             console.log(error.message);

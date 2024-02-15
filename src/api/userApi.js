@@ -1,7 +1,6 @@
 import { userAxiosInstance } from "./axioseInstance";
 
 export const userSignup = async (signupData) => {
-  console.log(signupData);
   const data = await userAxiosInstance.post("/signup", signupData);
   return data;
 };
@@ -67,7 +66,6 @@ export const singleStudioDetails = async (id) => {
 };
 export const updateProfileImage = async (values) => {
   try {
-    console.log(values);
     const data = await userAxiosInstance.patch("/updateProfile", values);
     return data;
   } catch (error) {
@@ -77,9 +75,7 @@ export const updateProfileImage = async (values) => {
 };
 
 export const getUserDetails = async (_id) => {
-  console.log("wroking api");
   const data = await userAxiosInstance.get(`/userDetails/${_id}`);
-  console.log(data, "dataaaaaaaa ");
   return data;
 };
 
@@ -136,3 +132,8 @@ export const cancelBookings = async (reason, bookingId) => {
   const data = await userAxiosInstance.post('/cancelBooking', { reason, bookingId })
   return data;
 };
+
+export const postReview = async(rating,review,userId,studioId) => {
+  const data = await userAxiosInstance.post('/postReview',{rating,review,userId,studioId})
+  return data;
+}

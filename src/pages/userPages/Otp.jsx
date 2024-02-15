@@ -44,7 +44,6 @@ function Otp () {
     try {
       const res = await clientResendOtp(userEmail)
       if (res.status == 200) {
-        console.log(res.data.message, 'from client resend')
         toast.success(res.data.message)
         setCountDown(60)
         setShowResendButton(false)

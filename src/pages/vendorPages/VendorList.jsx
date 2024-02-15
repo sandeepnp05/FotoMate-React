@@ -27,9 +27,7 @@ function VendorList () {
 
   const handleBlockVendor = async (vendorId, status) => {
     try {
-      console.log('working')
       const res = await blockVendor(vendorId, status)
-      console.log(vendorId, status, 'vs')
 
       if (res.data && res.data.message === 'updated') {
         // If the response has data and the message is 'updated'
@@ -63,10 +61,6 @@ function VendorList () {
   const vendorInSinglePage = filteredData.slice(firstIndex, lastIndex)
   const totalPages = Math.ceil(filteredData.length / dataPerPage)
   const numbers = [...Array(totalPages + 1).keys()].slice(1)
-  console.log(vendors, 'vendors')
-  console.log(numbers, 'numbers')
-  console.log(totalPages, 'totalPages')
-  console.log(vendorInSinglePage, 'vendorInSinglePage')
   return (
     <>
       <Sidebar />

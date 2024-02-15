@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { UserNavbar } from './UserNavbar';
 import { initFlowbite } from 'flowbite';
@@ -9,6 +9,7 @@ import { getBooking, getUserDetails } from '../../api/userApi';
 
 
 const ViewUserProfile = () => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     const { user } = useSelector((state) => state.userReducer);
     useEffect(() => {
@@ -19,8 +20,6 @@ const ViewUserProfile = () => {
         queryKey: ['booking', user._id], 
         queryFn: () => getBooking(user._id)
       });
-      console.log(user._id,'userid')
-      console.log(data,'data')
 
       if (isLoading) {
           return <div>Loading...</div>;
@@ -29,7 +28,6 @@ const ViewUserProfile = () => {
       if (isError) {
           return <div>Error occurred while fetching user details</div>;
       }
-      console.log(data,'user')
   return (
     <>
       <UserNavbar />
@@ -37,9 +35,8 @@ const ViewUserProfile = () => {
         {/* left div */}
         <div className="w-full max-w-md justify-center items-center bg-white border border-gray-300 dark:bg-gray-800 dark:border-gray-700  p-4">
           <div className="flex justify-end">
-            <button
-              id="dropdownButton"
-              data-dropdown-toggle="dropdown"
+          <button
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
               className="inline-block text-gray-600 dark:-gray-400text hover:bg-gray-100 dark:hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-1.5"
               type="button"
             >
@@ -55,22 +52,17 @@ const ViewUserProfile = () => {
               </svg>
             </button>
             {/* Dropdown menu */}
-            <div
-              id="dropdown"
-              className="z-10 hidden text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow-md md:w-44 dark:bg-gray-700"
-            >
-              <ul className="py-2" aria-labelledby="dropdownButton">
-                <li>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                  ><Link to={'/profile'}>
-                    Edit Profile
+            {isDropdownOpen && (
+              <div className="absolute mr-10 z-10 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow-md md:w-44 dark:bg-gray-700">
+                <ul className="py-2">
+                  <li>
+                    <Link to={'/profile'} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
+                      Edit Profile
                     </Link>
-                  </a>
-                </li>
-              </ul>
-            </div>
+                  </li>
+                </ul>
+              </div>
+            )}
           </div>
           <div className="flex flex-col items-center pb-4">
             <img

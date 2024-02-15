@@ -37,7 +37,6 @@ function UserProfile () {
       if (img) {
         const res = await updateProfileImage({ _id, img })
         const user = res.data
-        console.log(res.data)
         setRender(true)
       }
     } catch (error) {
@@ -52,7 +51,6 @@ function UserProfile () {
   useEffect(() => {
     setRender(false)
     getUserDetails(_id).then(response => {
-      console.log(response, 'reds')
       setUserImage(response?.data?.userData?.profileImage)
       dispatch(updateUserImage(response?.data?.userData?.profileImage))
     })
@@ -64,6 +62,8 @@ function UserProfile () {
     toast.success('Logout successfully')
     navigate('/login')
   }
+
+  
 
   return (
     <>
