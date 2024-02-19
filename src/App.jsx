@@ -1,3 +1,4 @@
+import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import UserRoute from './routes/UserRoute'
 import { ToastContainer } from 'react-toastify'
@@ -8,6 +9,12 @@ import VendorRoute from './routes/VendorRoute'
 
 
 function App () {       
+  React.useEffect(() => {
+    var _mtm = window._mtm = window._mtm || [];
+    _mtm.push({'mtm.startTime': (new Date().getTime()), 'event': 'mtm.Start'});
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.async=true; g.src='https://cdn.matomo.cloud/fotomatevercelapp.matomo.cloud/container_fBrE1IGl.js'; s.parentNode.insertBefore(g,s);
+   }, [])
   return (
     <>
       <Router>
