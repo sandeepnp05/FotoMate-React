@@ -4,7 +4,8 @@ import { ToastContainer } from 'react-toastify'
 import './App.css'
 import AdminRoute from './routes/AdminRoute'
 import VendorRoute from './routes/VendorRoute'
-;
+
+
 
 function App () {       
   return (

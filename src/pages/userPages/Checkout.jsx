@@ -20,9 +20,6 @@ function Checkout() {
     useEffect(() => {               
         initFlowbite();
       }, []);
-
-   
-
       
       async function checkout () {
         const stripePromise = loadStripe("pk_test_51OdspaSGkLuCRTDWFPKKeCPtiQHUkbyMUXCURUrfUQSK6aqMS5Xv0wAzPq9nwVZSHJkquAZw7VBlmTpkQTpQL7MB00JLquZsMx")

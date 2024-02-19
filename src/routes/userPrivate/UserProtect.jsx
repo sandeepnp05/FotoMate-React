@@ -4,7 +4,6 @@ function UserProtect(props) {
   try {
     const token = localStorage.getItem("userToken");
     if (token) {
-        // eslint-disable-next-line react/prop-types
         return props.children;
     } else {
       toast.success("You must login first");
