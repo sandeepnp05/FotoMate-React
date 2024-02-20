@@ -50,16 +50,10 @@ const UserSignup = () => {
 
   return (
     <>
-     <div
-      className='mt-12 flex-flex col absolute top-0 z-[-2] min-h-screen w-screen bg-[#000000] bg-[radial-gradient(#ffffff33_1px,#00091d_1px)] bg-[size:20px_20px]'
-
-        // style={{
-        //   backgroundImage: "url('/src/assets/wedding1.jpg')",
-        // }}
-      >
+       <div className="inset-0 z-0 min-h-screen w-full bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]">
         <UserNavbar></UserNavbar>
-
-        <div className='flex-grow  mt-36 md:mt-8 p-4 md:p-4 lg:w-1/2'>
+        <div className='flex items-center justify-center'>
+        <div className='flex-grow  mt-36  p-4 md:p-4 lg:w-1/2 '>
           <div className='hero-content flex-col lg:flex-row-reverse text-black'>
             <div className='text-center lg:text-left'></div>
             <div
@@ -197,6 +191,7 @@ const UserSignup = () => {
               </form>
             </div>
           </div>
+        </div>
         </div>
       </div>
     </>

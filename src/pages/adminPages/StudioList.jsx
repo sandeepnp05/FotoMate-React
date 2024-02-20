@@ -51,7 +51,7 @@ function StudioList () {
         error.response?.data?.message || 'Error updating studio status'
       );
       console.log(error.message);
-    }
+    } 
   };
   
   const filteredData = studio

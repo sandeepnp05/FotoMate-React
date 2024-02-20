@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
-import React from 'react'
+import axios from 'axios'
+import React, { useEffect } from 'react'
 import { adminReport } from '../../api/adminApi'
 
 function Dashboard() {
@@ -9,6 +10,25 @@ function Dashboard() {
         queryFn: () => adminReport()
     })
     console.log(data,'data')
+
+
+    //real time users
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const response = await axios.get('https://fotomatevercelapp.matomo.cloud/index.php?module=Widgetize&action=iframe&disableLink=1&widget=1&moduleToWidgetize=Live&actionToWidgetize=getSimpleLastVisitCount&idSite=1&period=day&date=2024-02-19');
+                console.log(response.data, 'users');
+            } catch (error) {
+                console.error('Error fetching real-time users:', error);
+            }
+        };
+
+        fetchUsers();
+
+       
+    }, []);
+
+
   return (
     <div>
       <div className="min-h-screen bg-gray-50/50">
