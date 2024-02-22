@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import VendorNavbar from '../../components/vendorComponents/vendorCommon/VendorNavbar'
 import { Link, useParams } from 'react-router-dom'
 import { useEffect } from 'react'
@@ -6,8 +6,12 @@ import { useQuery } from '@tanstack/react-query'
 import ErrorBoundary from '../../components/common/ErrorBoundary'
 import { fetchBooking } from '../../api/vendorApi'
 import Tooltip from '../../components/common/Tooltip'
+import { cancelBooking, markBookingCompleted } from '../../api/adminApi'
+import { toast } from 'react-toastify'
 
 function Bookings () {
+  const [reason, setReason] = useState('')
+  const [bookingId, setBookingId] = useState('')
   const { vendorId } = useParams()
 
   const { data, isError, isLoading } = useQuery({
@@ -22,6 +26,24 @@ function Bookings () {
   if (isError) {
     return <div>Error occurred while fetching user details</div>
   }
+
+  const handleSubmit = async e => {
+    e.preventDefault()
+    const { data } = await cancelBooking(reason, bookingId)
+    const myModal = document.getElementById('my_modal_1')
+    myModal.close()
+  }
+
+  const handleMarkCompleted = async (id) => {
+    console.log(id,'id')
+    const res = await markBookingCompleted({id})
+    if(res.status===201){
+      toast.success('Status updated')
+    }
+}
+
+
+
   return (
       <>
         <VendorNavbar />
@@ -44,7 +66,7 @@ function Bookings () {
                     Location
                   </th>
                   <th scope='col' className='px-6 py-3'>
-                    Date
+                   Event Date
                   </th>
                   <th scope='col' className='px-6 py-3'>
                     Total amount
@@ -79,14 +101,70 @@ function Bookings () {
                       <td className='px-6 py-4'>{bookingData?.totalAmount}</td>
                       <td className='px-6 py-4'>{bookingData?.advanceAmount}</td>
                       <td
-                    className={`px-6 py-4 ${
-                      bookingData.workStatus === 'cancelled'
+                   className={`px-6 py-4 ${
+                    bookingData.workStatus === 'cancelled'
                         ? 'text-red-500'
-                        : 'text-yellow-500'
-                    }`}
+                        : bookingData.workStatus === 'Completed'
+                            ? 'text-green-500'
+                            : 'text-yellow-500'
+                }`}
+                
                   >
                     {bookingData.workStatus}
                   </td>
+                  <td className='px-6 py-4 text-right'>
+    {bookingData.workStatus !== 'cancelled' && bookingData.workStatus !== 'Completed' && (
+        <>
+            {/* Cancel or Mark as Completed button */}
+            {new Date() > new Date(bookingData.eventDate) ? (
+                <button
+                    className='btn-link opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-success dark:text-blue-500 hover:underline mx-2'
+                    onClick={() => handleMarkCompleted(bookingData._id)}
+                >
+                    Mark as Completed 
+                </button>
+            ) : (
+                <button
+                    className='btn-link opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-danger dark:text-blue-500 hover:underline mx-2'
+                    onClick={() => {
+                        setBookingId(bookingData._id);
+                        document.getElementById('my_modal_1').showModal();
+                    }}
+                >
+                    Cancel Booking 
+                </button>
+            )}
+        </>
+    )}
+    <dialog id='my_modal_1' className='modal'>
+        <div className='modal-box rounded-sm'>
+            <h3 className='font-bold text-xl'>
+                Reason for cancellation!
+            </h3>
+            <form onSubmit={handleSubmit}>
+                <textarea
+                    className='w-full h-full rounded-sm'
+                    onChange={e => setReason(e.target.value)}
+                />
+                <div className='modal-action'>
+                    <button
+                        type='submit'
+                        className='btn btn-success btn-sm text-white'
+                    >
+                        Submit and cancel
+                    </button>
+                    <button
+                        type='button'
+                        className='btn btn-danger btn-sm text-black'
+                    >
+                        Close
+                    </button>
+                </div>
+            </form>
+        </div>
+    </dialog>
+</td>
+
                       <td className='px-6 py-4 text-right '>
              
                         <Tooltip text={'chat with user'}>

@@ -2,6 +2,9 @@ import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import React, { useEffect } from 'react'
 import { adminReport } from '../../api/adminApi'
+import calculatePercentageChange from './percentageChange';
+import PiChart from './PiChart';
+
 
 function Dashboard() {
 
@@ -9,24 +12,29 @@ function Dashboard() {
         queryKey:['salesData'],
         queryFn: () => adminReport()
     })
-    console.log(data,'data')
+
+// todays Revenue
+ const revenueToday = data?.data?.report[0].revenue;
+ const revenueLastWeek = data?.data?.report[1].revenue;
+ const moneyToday=  calculatePercentageChange(revenueToday,revenueLastWeek)
 
 
-    //real time users
-    useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const response = await axios.get('https://fotomatevercelapp.matomo.cloud/index.php?module=Widgetize&action=iframe&disableLink=1&widget=1&moduleToWidgetize=Live&actionToWidgetize=getSimpleLastVisitCount&idSite=1&period=day&date=2024-02-19');
-                console.log(response.data, 'users');
-            } catch (error) {
-                console.error('Error fetching real-time users:', error);
-            }
-        };
+ // todays Users
 
-        fetchUsers();
+ const newUsersToday = data?.data?.report[0].newUsersCount;
+ const newUsersLastWeek = data?.data?.report[1].newUsersCount;
+ const usersToday=  calculatePercentageChange(newUsersToday,newUsersLastWeek)
 
-       
-    }, []);
+
+ const newVendorToday = data?.data?.report[0].newVendorsCount;
+ const newVendorLastWeek = data?.data?.report[1].newVendorsCount;
+ const vendorsToday=  calculatePercentageChange(newVendorToday,newVendorLastWeek)
+
+ // work status
+
+   const {pendingCount,completedCount,cancelledCount} = data?.data || {} ;
+   
+
 
 
   return (
@@ -62,12 +70,12 @@ function Dashboard() {
               Today's Money
             </p>
             <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
-              $53k
+            {` ₹ ${data?.data?.report?.[0].revenue}`}
             </h4>
           </div>
           <div className="border-t border-blue-gray-50 p-4">
             <p className="block antialiased font-sans text-base leading-relaxed font-normal text-blue-gray-600">
-              <strong className="text-green-500">+55%</strong>&nbsp;than last
+              <strong className={moneyToday?.colorClass}>{`${moneyToday?.percentage} `}</strong>&nbsp;than last
               week
             </p>
           </div>
@@ -93,13 +101,13 @@ function Dashboard() {
               Today's Users
             </p>
             <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
-              2,300
+            {`  ${data?.data?.report?.[0].newUsersCount}`}
             </h4>
           </div>
           <div className="border-t border-blue-gray-50 p-4">
             <p className="block antialiased font-sans text-base leading-relaxed font-normal text-blue-gray-600">
-              <strong className="text-green-500">+3%</strong>&nbsp;than last
-              month
+              <strong className={usersToday?.colorClass}>{`${usersToday?.percentage}`}</strong>&nbsp;than last
+              week
             </p>
           </div>
         </div>
@@ -117,15 +125,15 @@ function Dashboard() {
           </div>
           <div className="p-4 text-right">
             <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">
-              New Clients
+              New Vendor
             </p>
             <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
-              3,462
+            {`  ${data?.data?.report?.[1].newVendorsCount}`}
             </h4>
           </div>
           <div className="border-t border-blue-gray-50 p-4">
             <p className="block antialiased font-sans text-base leading-relaxed font-normal text-blue-gray-600">
-              <strong className="text-red-500">-2%</strong>&nbsp;than yesterday
+              <strong className={vendorsToday?.colorClass}>{`${vendorsToday?.percentage}`}</strong>&nbsp;than last week
             </p>
           </div>
         </div>
@@ -143,21 +151,21 @@ function Dashboard() {
           </div>
           <div className="p-4 text-right">
             <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">
-              Sales
+              Total revenue
             </p>
             <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
-              $103,430
+            {` ₹ ${data?.data?.totalAdvance}`}
             </h4>
           </div>
           <div className="border-t border-blue-gray-50 p-4">
-            <p className="block antialiased font-sans text-base leading-relaxed font-normal text-blue-gray-600">
-              <strong className="text-green-500">+5%</strong>&nbsp;than
+            {/* <p className="block antialiased font-sans text-base leading-relaxed font-normal text-blue-gray-600">
+              <strong className={usersToday?.colorClass}>{`${usersToday?.percentage}`}</strong>&nbsp;than
               yesterday
-            </p>
+            </p> */}
           </div>
         </div>
       </div>
-      <div className="mb-4 grid grid-cols-1 gap-6 xl:grid-cols-3">
+      {/* <div className="mb-4 grid grid-cols-1 gap-6 xl:grid-cols-3">
         <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md overflow-hidden xl:col-span-2">
           <div className="relative bg-clip-border rounded-xl overflow-hidden bg-transparent text-gray-700 shadow-none m-0 flex items-center justify-between p-6">
             <div>
@@ -370,7 +378,13 @@ function Dashboard() {
             </table>
           </div>
         </div>
-      </div>
+      </div> */}
+      <PiChart 
+      pendingCount={pendingCount}
+      completedCount={completedCount}
+      cancelledCount={cancelledCount} >
+      
+      </PiChart>
     </div>
     <div className="text-blue-gray-600">
    

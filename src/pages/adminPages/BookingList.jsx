@@ -88,6 +88,8 @@ function BookingList () {
                   </td>
 
                   <td className='px-6 py-4 text-right'>
+
+                   {bookingData.workStatus !== 'cancelled' && (
                     <button
                       className='btn-link opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-danger dark:text-blue-500 hover:underline mx-2'
                       onClick={() => {
@@ -97,8 +99,8 @@ function BookingList () {
                     >
                       cancel booking
                     </button>
+                     )}
 
-                    {/* className='opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-danger dark:text-blue-500 hover:underline mx-2' */}
                     <dialog id='my_modal_1' className='modal'>
                       <div className='modal-box rounded-sm'>
                         <h3 className='font-bold text-xl'>

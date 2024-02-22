@@ -115,3 +115,8 @@ export const blockStudio = async ( studioId, status ) => {
     const data = await adminAxioseInstance.get('/adminReport')
     return data;
   }
+
+  export const markBookingCompleted = async(id)=>{
+    const data = await adminAxioseInstance.post('/markCompleted',id)
+    return data;
+  }

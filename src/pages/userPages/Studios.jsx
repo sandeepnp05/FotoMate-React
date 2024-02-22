@@ -153,9 +153,9 @@ function Studios() {
       <div className='mt-20'>
         <Gallery catId={catFilter} />
       </div>
+      <UserFooter/>
       </div>
       
-      <UserFooter />
     </>
   );
 }
