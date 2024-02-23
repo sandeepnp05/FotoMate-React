@@ -164,7 +164,7 @@ function VendorHero ({ studio }) {
   return (
     <>
     <div className='relative h-screen overflow-hidden'>
-    <div className="absolute top-0 z-[-2] h-full w-full bg-neutral-950 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]">
+    <div className=" top-0 z-[-2] h-full w-full bg-neutral-950 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]">
       <section className=''>
         <div className='grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12'>
           <div className='mr-auto place-self-center lg:col-span-7'>
@@ -184,7 +184,8 @@ function VendorHero ({ studio }) {
               <button
                 onClick={handleModalToggle}
                 type='button'
-                className='inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-gray-400 border border-gray-300 rounded-lg hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-500 dark:text-white dark:border-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-400'
+                className='inline-flex z-10 cursor-pointer items-center justify-center px-5 py-3 text-base font-medium text-center text-gray-400 border border-gray-300 rounded-lg hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-500 dark:text-white dark:border-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-400'
+                style={{ zIndex: 9999 }} 
               >
                 Get Started
               </button>
@@ -200,7 +201,7 @@ function VendorHero ({ studio }) {
 
             {isStudio && (
               <Link to={`/vendor/studio/${vendorId}`}>
-                <button className='inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-gray-400 border border-gray-300 rounded-lg hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-500 dark:text-white dark:border-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-400'>
+                <button className='inline-flex cursor-pointer items-center justify-center px-5 py-3 text-base font-medium text-center text-gray-400 border border-gray-300 rounded-lg hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-500 dark:text-white dark:border-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-400'>
                   View Studio
                 </button>
               </Link>
