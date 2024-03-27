@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux'
 import { sendMessageApi } from '../../api/messageApi'
 import VendorNavbar from '../../components/vendorComponents/vendorCommon/VendorNavbar'
  
-const ENDPOINT = 'https://fotomate.swoz.shop'
+const ENDPOINT = 'https://fotomate-server.onrender.com'
 // const ENDPOINT = 'https://localhost:3000' 
 var socket, selectedChatCompare
 

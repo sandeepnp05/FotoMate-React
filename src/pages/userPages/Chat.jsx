@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux'
 import { sendMessageApi } from '../../api/messageApi'
 import { UserNavbar } from './UserNavbar'
 
-const ENDPOINT='https://fotomate.swoz.shop'
+const ENDPOINT='https://fotomate-server.onrender.com'
 // const ENDPOINT='https://localhost:3000'
 var socket, selectedChatCompare
 
