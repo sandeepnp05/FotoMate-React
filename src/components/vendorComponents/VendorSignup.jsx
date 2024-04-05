@@ -45,8 +45,8 @@ function VendorSignup () {
       <div className='flex w-full max-w-xl bg-white rounded-lg shadow-lg overflow-hidden'>
         
         <img
-          src='/src/assets/photographer.jpg'
-          alt='form'
+          src='https://res.cloudinary.com/dti7ahrb6/image/upload/v1712309495/vendor%20assets/ufy1ka28efmwsqdbbzso.jpg'
+          alt='photogrpher'
           className='w-1/2 h-auto object-cover hidden md:block' // Hide the image on screens smaller than md
         />
         
