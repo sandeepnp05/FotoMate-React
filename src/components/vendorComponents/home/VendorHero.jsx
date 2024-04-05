@@ -208,7 +208,7 @@ function VendorHero ({ studio }) {
             )}
           </div>
           <div className='hidden lg:mt-0 lg:col-span-5 lg:flex'>
-            <img src='/src/assets/camera2.png' alt='mockup' />
+            <img src='https://res.cloudinary.com/dti7ahrb6/image/upload/v1712309475/vendor%20assets/zeuvstgc5ksjlp6u4cpf.png' alt='camera' />
           </div>
         </div>
       </section>
