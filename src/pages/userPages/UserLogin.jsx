@@ -11,6 +11,7 @@ import { UserNavbar } from './UserNavbar'
 import Oauth from '../../components/userComponents/Oauth'
 import { Button } from '@material-tailwind/react'
 
+
 function UserLogin () {
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -45,7 +46,30 @@ function UserLogin () {
       console.log(error.message)
     }
   }
-
+  const demoEmail ='demo@gmail.com'
+  const demoPassword = '123456Aaa@@'
+   console.log(demoEmail,demoPassword)
+  const handleDemoLogin = async () => {
+    
+    try {
+      const res = await loginVerification({ email:demoEmail, password:demoPassword });
+      if (res?.status === 200) {
+        const { user, token } = res.data
+        localStorage.setItem('userToken', token)
+        dispatch(
+          userLogin({
+            user: user,
+            token: token
+          })
+        )
+        toast.success(res?.data?.message)
+        navigate('/')
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message)
+      console.log(error.message)
+    }
+  }
   const isFullWidth = window.innerWidth === window.screen.width
   return (
     <>
@@ -110,11 +134,19 @@ function UserLogin () {
                 <div className='form-control mt-'>
                   <Button
                     type='submit'
-                    className='bg-indigo-900 hover:bg-indigo-800 w-full'
+                    className='bg-indigo-800 hover:bg-indigo-800 w-full'
                   >
                     Login
                   </Button>
+                
+                  <Button
+                    onClick={handleDemoLogin}
+                    className='bg-indigo-500 hover:bg-indigo-800 w-full my-3'
+                  >
+                   Try Demo 
+                  </Button>
                   <Oauth />
+                  
                 </div>
               </form>
               <div className='flex flex-col items-center justify-center space-y-2'>
