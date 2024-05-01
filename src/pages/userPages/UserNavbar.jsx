@@ -9,21 +9,20 @@ import {
 } from '@material-tailwind/react'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import {useState } from 'react'
+import { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { userLogout } from '../../reduxStore/slices/userSlice'
 import { toast } from 'react-toastify'
 import { getUserDetails } from '../../api/userApi'
 
-export function UserNavbar ({userImage}) {
+export function UserNavbar ({ userImage }) {
   const [openNav, setOpenNav] = useState(false)
   const [isDropdownOpen, setDropdownOpen] = useState(false)
-  const [img,setImage] = useState('')
+  const [img, setImage] = useState('')
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const location = useLocation()
   const { user } = useSelector(state => state.userReducer)
- 
 
   const handleLogout = () => {
     localStorage.removeItem('userToken')
@@ -31,10 +30,9 @@ export function UserNavbar ({userImage}) {
     toast.success('Logout successfully')
     navigate('/login')
   }
-  useEffect(()=>{
+  useEffect(() => {
     setImage(userImage)
-  },[userImage])
-
+  }, [userImage])
 
   const toggleDropdown = () => {
     setDropdownOpen(!isDropdownOpen)
@@ -52,39 +50,39 @@ export function UserNavbar ({userImage}) {
       <Link to='/'>
         <Typography
           as='li'
-          variant='small'
+          variant='large'
           color='blue-gray'
-          className='p-1 font-normal'
+          className='p-1 font-bold hover:underline transition duration-500 ease-in-out'
         >
-          HOME
+          Home
         </Typography>
       </Link>
       <Link to={'/studios'}>
-      <Typography
-        as='li'
-        variant='small'
-        color='blue-gray'
-        className='p-1 font-normal'
-      >
-       STUDIOS
-      </Typography>
+        <Typography
+          as='li'
+          variant='large'
+          color='blue-gray'
+          className='p-1 font-bold hover:underline'
+        >
+          Studios
+        </Typography>
       </Link>
-      <Typography
+      {/* <Typography
         as='li'
-        variant='small'
+        variant='large'
         color='blue-gray'
-        className='p-1 font-normal'
+        className='p-1 font-bold  hover:underline'
       >
-          IDEAS
-      </Typography>
+          Ideas
+      </Typography> */}
       <Link to='/contact'>
         <Typography
           as='li'
-          variant='small'
+          variant='large'
           color='blue-gray'
-          className='p-1 font-normal'
+          className='p-1 font-bold  hover:underline'
         >
-            CONTACT
+          Contact
         </Typography>
       </Link>
 
@@ -94,7 +92,7 @@ export function UserNavbar ({userImage}) {
             <div className='avatar cursor-pointer' onClick={toggleDropdown}>
               <div className='w-6 mx-2 rounded-full ring ring-danger ring-offset-base-1 ring-offset-1'>
                 <img
-                  src={img?img:user.profileImage}
+                  src={img ? img : user.profileImage}
                   alt='https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg'
                 />
               </div>
@@ -137,27 +135,48 @@ export function UserNavbar ({userImage}) {
         <Navbar className='fixed top-0 z-10 w-full h-max max-w-full rounded-none px-4 py-2 lg:px-8 lg:py-4'>
           <div className=' flex items-center justify-between text-blue-gray-900'>
             <Link to={'/'}>
-              <Typography
-                className='mr-4 cursor-pointer px-9 py-1.5 text-2xl font-bold'
-              >
+              <Typography className='mr-4 cursor-pointer px-9 py-1.5 text-2xl font-bold'>
                 FotoMate
               </Typography>
             </Link>
             <div className='flex items-center gap-4'>
               <div className='mr-4 hidden  lg:block'>{navList}</div>
               {!user && (
-                <Link to='/login'>
-                  <div className='flex items-center gap-x-1'>
-                    <Button
-                      variant='gradient'
-                      size='sm'
-                      className='hidden lg:inline-block'
+                <div className='flex items-center gap-x-1'>
+                  <Link to='/login'>
+                    <Typography
+                      as='li'
+                      variant='large'
+                      color='blue-gray'
+                      className='p-1 font-bold hover:underline transition duration-500 ease-in-out'
                     >
-                      <span>Sign in</span>
+                      <span>Login</span>
+                    </Typography>
+                  </Link>
+                  <Link to='/vendor/login'>
+                    <Button
+                      className='text-white font-bold tracking-wide  items-center justify-center
+                      bg-blue-600 hover:bg-blue-700 focus:outline-none 
+                       focus:ring-4 focus:ring-blue-300 rounded-full text-sm 
+                       px-4 py-1.5 mt-2 text-center me-2 mb-2 dark:bg-blue-600 
+                       dark:hover:bg-blue-700 dark:focus:ring-blue-800 capitalize hidden lg:flex '
+                      variant='contained'
+                      color='primary'
+                    >
+                      <img
+                      className=" rounded-full"
+                        src='https://res.cloudinary.com/dti7ahrb6/image/upload/v1712642108/user%20assets/cxeewzrougr5f09vs4qn.png'
+                        alt='Photographer'
+                        style={{ marginRight: '10px' }}
+                        width='30'
+                        height='30'
+                      />
+                    <span className="normal-case">Join as a Photographer</span>
                     </Button>
-                  </div>
-                </Link>
+                  </Link>
+                </div>
               )}
+
               <IconButton
                 variant='text'
                 className='ml-auto h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden'
