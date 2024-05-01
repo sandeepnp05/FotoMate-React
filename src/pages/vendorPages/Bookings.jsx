@@ -35,7 +35,6 @@ function Bookings () {
   }
 
   const handleMarkCompleted = async (id) => {
-    console.log(id,'id')
     const res = await markBookingCompleted({id})
     if(res.status===201){
       toast.success('Status updated')

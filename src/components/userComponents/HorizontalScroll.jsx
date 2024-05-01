@@ -2,7 +2,6 @@ import { motion, useTransform, useScroll } from "framer-motion";
 import { useRef } from "react";
 
 const HorizontalScroll = ({category}) => {
-  console.log(category)
   return (
     <div className="bg-neutral-800 opacity-100 bg-transparent w-full">
         
