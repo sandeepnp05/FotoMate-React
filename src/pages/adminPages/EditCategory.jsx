@@ -25,7 +25,6 @@ function EditCategory () {
     }
     fetchData()
   }, [cat_id])
-console.log(category)
   async function handleEdit (values) {
     try {
       setIsSubmitting(true); // Start submitting

@@ -48,7 +48,6 @@ function UserLogin () {
   }
   const demoEmail ='demo@gmail.com'
   const demoPassword = '123456Aaa@@'
-   console.log(demoEmail,demoPassword)
   const handleDemoLogin = async () => {
     
     try {
